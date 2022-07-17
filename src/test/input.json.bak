@@ -1,0 +1,12 @@
+{
+	"inputConnectionString":"",
+	"outputConnectionString":"",
+	"inputSource":"",
+	"inputType":"",
+	"outputSource":"",
+	"outputType":"",
+	"DB_USER_NAME":"",
+	"DB_PASSWORD":"",
+	"TABLE_NAME":""
+	
+}
