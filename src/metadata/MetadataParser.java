@@ -8,15 +8,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.Constants;
 
 public class MetadataParser {
-	
 
-	public static JSONObject redMetadata(String filePath) throws IOException, FileNotFoundException {
+	public JSONObject readMetadata(String filePath) throws IOException, FileNotFoundException {
 		File f = new File(filePath);
 		if (f.exists()) {
 			InputStream is = new FileInputStream(filePath);
@@ -33,25 +34,61 @@ public class MetadataParser {
 		return null;
 	}
 
-	public static JSONObject parseMetadata(String filePath) throws FileNotFoundException, IOException {
-		JSONObject metadata = redMetadata(filePath);
+	public JSONObject parseMetadata(String filePath) throws FileNotFoundException, IOException {
+		JSONObject metadata = readMetadata(filePath);
+		return parseMetadata(metadata);
+	}
+
+	public JSONObject parseMetadata(JSONObject metadata) {
 		if (validateMetadata(metadata)) {
 			return metadata;
 		}
 		return null;
 	}
 
-	public static boolean validateMetadata(JSONObject metadata) {
+	public boolean validateMetadata(JSONObject migratorExt) {
 		try {
-			if (metadata.has(Constants.INPUT_CONNECTION_STRING) && metadata.has(Constants.INPUT_SOURCE)
-					&& metadata.has(Constants.OUTPUT_SOURCE) && metadata.has(Constants.INPUT_TYPE)
-					&& metadata.has(Constants.OUTPUT_TYPE)) {
-				System.out.println("input: " + metadata.toString());
-				return true;
+			JSONObject metadata = migratorExt.getJSONArray(Constants.MIGRATOR_EXT).getJSONObject(0);
+			if (!(metadata.has(Constants.INPUT_SOURCE_TYPE) && metadata.has(Constants.INPUT_SOURCE)
+					&& metadata.has(Constants.OUTPUT_SOURCE_TYPE) && metadata.has(Constants.OUTPUT_SOURCE))) {
+				return false;
 			}
+			if (!(metadata.has(Constants.SCHEMA) && metadata.getJSONObject(Constants.SCHEMA).has(Constants.INPUT_SCHEMA)
+					&& metadata.getJSONObject(Constants.SCHEMA).has(Constants.OUTPUT_SCHEMA)
+					&& metadata.getJSONObject(Constants.SCHEMA).has(Constants.ENTITIES))) {
+				return false;
+			}
+			JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
+			if (!(schema.has(Constants.INPUT_ENTITY_NAME) && schema.has(Constants.OUTPUT_ENTITY_NAME)
+					&& schema.has(Constants.ENTITIES))) {
+				return false;
+			}
+			JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
+			if (entities.isEmpty()) {
+				return false;
+			}
+
+			for (int i = 0; i < entities.length(); i++) {
+				JSONObject entity = entities.getJSONObject(i);
+				if (!(entity.has(Constants.OUTPUT_ENTITY_NAME) && entity.has(Constants.INPUT_ENTITY_NAME)
+						&& entity.has(Constants.MAPPINGS))) {
+					return false;
+				}
+				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
+				if (mappings.isEmpty()) {
+					return false;
+				}
+				for (int j = 0; j < mappings.length(); j++) {
+					JSONObject attribute = mappings.getJSONObject(j);
+					if (!(attribute.has(Constants.INPUT_ATTRIBUTE_NAME)
+							&& attribute.has(Constants.OUTPUT_ATTRIBUTE_NAME))) {
+
+					}
+				}
+			}
+			return true;
 		} catch (JSONException ex) {
 			return false;
 		}
-		return false;
 	}
 }
