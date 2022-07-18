@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class JSONConverter {
 
-	public JSONObject convertJSONToBSON() {
+	public JSONObject convertJSONToBSON(JSONObject metadata, StringBuilder fileData) {
 		JSONObject result = null;
 		return result;
 	}
