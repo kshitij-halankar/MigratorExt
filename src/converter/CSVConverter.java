@@ -18,43 +18,42 @@ public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata, StringBuilder fileData) {
 		JSONObject result = null;
-		 int i;
-         String[] nextRecord;
-         boolean readAttributes = false;
-         JSONArray records = new JSONArray();
-         ArrayList attributes = new ArrayList();
+		int i;
+		String[] nextRecord;
+		boolean readAttributes = false;
+		JSONArray records = new JSONArray();
+		ArrayList attributes = new ArrayList();
+
+		try {
+			FileReader filereader = new FileReader(fileData.toString());
+			CSVReader csvReader = new CSVReader(filereader);
+			while ((nextRecord = csvReader.readNext()) != null) {
+				if (!readAttributes) {
+					for (String cell : nextRecord)
+						attributes.add(cell);
+					readAttributes = true;
+				} else {
+					JSONObject tempObject = new JSONObject();
+					i = 0;
+					for (String cell : nextRecord) {
+						tempObject.put(attributes.get(i).toString(), cell);
+						i++;
+					}
+					records.put(tempObject);
+				}
+
+			}
+			result.put("convertedValue", records);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (CsvValidationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-		 try {       
-	            FileReader filereader = new FileReader(fileData.toString());
-	            CSVReader csvReader = new CSVReader(filereader);
-	            while ((nextRecord = csvReader.readNext()) != null) {
-	                if (!readAttributes) {
-	                    for (String cell : nextRecord)
-	                        attributes.add(cell);
-	                    readAttributes = true;
-	                } else {
-	                    JSONObject tempObject = new JSONObject();
-	                    i = 0;
-	                    for (String cell : nextRecord) {
-	                        tempObject.put(attributes.get(i).toString(), cell);
-	                        i++;
-	                    }
-	                    records.put(tempObject);
-	                }
-
-	            }
-	            result.put("convertedValue", records);
-	            
-	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (CsvValidationException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-		 
-			return result;
-
+		return result;
 	}
 
 	public JSONObject convertCSVToSQLAndInsert(JSONObject metadata) {
