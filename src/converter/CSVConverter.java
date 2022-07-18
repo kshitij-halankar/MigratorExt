@@ -1,16 +1,16 @@
 package converter;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.opencsv.CSVReader;
-
+import com.opencsv.exceptions.CsvValidationException;
 import connector.OracleDBConnector;
 import migrator.OracleDBMigrator;
 import utils.Constants;
@@ -19,7 +19,43 @@ public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata, StringBuilder fileData) {
 		JSONObject result = null;
-		return result;
+		 int i;
+         String[] nextRecord;
+         boolean readAttributes = false;
+         JSONArray records = new JSONArray();
+         ArrayList attributes = new ArrayList();
+		
+		 try {       
+	            FileReader filereader = new FileReader(fileData.toString());
+	            CSVReader csvReader = new CSVReader(filereader);
+	            while ((nextRecord = csvReader.readNext()) != null) {
+	                if (!readAttributes) {
+	                    for (String cell : nextRecord)
+	                        attributes.add(cell);
+	                    readAttributes = true;
+	                } else {
+	                    JSONObject tempObject = new JSONObject();
+	                    i = 0;
+	                    for (String cell : nextRecord) {
+	                        tempObject.put(attributes.get(i).toString(), cell);
+	                        i++;
+	                    }
+	                    records.put(tempObject);
+	                }
+
+	            }
+	            result.put("convertedValue", records);
+	            
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        } catch (CsvValidationException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		 
+			return result;
+
 	}
 
 	public JSONObject convertCSVToSQLAndInsert(JSONObject metadata) {
