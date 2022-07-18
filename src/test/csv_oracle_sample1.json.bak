@@ -1,0 +1,40 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "CSV",
+			"InputSource": "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\sample_csv_v1.csv",
+			"OutputSourceType": "Oracle",
+			"OutputSource": "<hostname:port:SID>",
+			"OutputSourceLoginUsername": "<Username>",
+			"OutputSourceLoginPassword": "<Password>",
+			"Schema": {
+				"InputSchema": "",
+				"OutputSchema": "EmployeeDetails",
+				"Entities": [
+					{
+						"InputEntityName": "",
+						"OutputEntityName": "Emp",
+						"Mappings": [
+							{
+								"InputAttributeName": "EmpID",
+								"OutputAttributeName": "EmpID"
+							},
+							{
+								"InputAttributeName": "EmpName",
+								"OutputAttributeName": "EmployeeName"
+							},
+							{
+								"InputAttributeName": "Salary",
+								"OutputAttributeName": "EmployeeSalary"
+							},
+							{
+								"InputAttributeName": "City",
+								"OutputAttributeName": "EmployeeCity"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

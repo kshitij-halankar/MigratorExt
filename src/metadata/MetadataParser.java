@@ -39,16 +39,19 @@ public class MetadataParser {
 		return parseMetadata(metadata);
 	}
 
-	public JSONObject parseMetadata(JSONObject metadata) {
+	public JSONObject parseMetadata(JSONObject metadata) throws JSONException {
 		if (validateMetadata(metadata)) {
 			return metadata;
+		}else {
+			throw new JSONException("Error in Input Metadata.");
 		}
-		return null;
 	}
 
 	public boolean validateMetadata(JSONObject migratorExt) {
 		try {
+//			System.out.println(migratorExt);
 			JSONObject metadata = migratorExt.getJSONArray(Constants.MIGRATOR_EXT).getJSONObject(0);
+//			System.out.println("metadata:\n"+metadata);
 			if (!(metadata.has(Constants.INPUT_SOURCE_TYPE) && metadata.has(Constants.INPUT_SOURCE)
 					&& metadata.has(Constants.OUTPUT_SOURCE_TYPE) && metadata.has(Constants.OUTPUT_SOURCE))) {
 				return false;
@@ -58,12 +61,7 @@ public class MetadataParser {
 					&& metadata.getJSONObject(Constants.SCHEMA).has(Constants.ENTITIES))) {
 				return false;
 			}
-			JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
-			if (!(schema.has(Constants.INPUT_ENTITY_NAME) && schema.has(Constants.OUTPUT_ENTITY_NAME)
-					&& schema.has(Constants.ENTITIES))) {
-				return false;
-			}
-			JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
+			JSONArray entities = metadata.getJSONObject(Constants.SCHEMA).getJSONArray(Constants.ENTITIES);
 			if (entities.isEmpty()) {
 				return false;
 			}
@@ -88,6 +86,7 @@ public class MetadataParser {
 			}
 			return true;
 		} catch (JSONException ex) {
+			System.out.println(ex.toString());
 			return false;
 		}
 	}
