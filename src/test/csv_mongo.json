@@ -1,0 +1,46 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "CSV",
+			"InputSource": "<Directory Path>",
+			"OutputSourceType": "Mongo",
+			"OutputSource": "<hostname:port:SID>",
+			"OutputSourceLoginUsername": "<Username>",
+			"OutputSourceLoginPassword": "<Password>",
+			"Schema": {
+				"InputSchema": "<SchemaName>",
+				"OutputSchema": "<SchemaName>",
+				"Entities": [
+					{
+						"InputEntityName": "<EntityName>",
+						"OutputEntityName": "<CollectionName1>",
+						"Mappings": [
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							},
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							}
+						]
+					},
+					{
+						"InputEntityName": "<EntityName>",
+						"OutputEntityName": "<CollectionName2>",
+						"Mappings": [
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							},
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
