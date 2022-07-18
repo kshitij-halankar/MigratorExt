@@ -15,21 +15,21 @@ import converter.XMLConverter;
 import utils.Constants;
 
 public class FileExtractor {
-	public JSONObject extractCSVAndConvert(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONObject extractCSVAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		CSVConverter csvConverter = new CSVConverter();
 		return csvConverter.convertCSVToJSON(metadata, fileData);
 	}
 
-	public JSONObject extractXMLAndConvert(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONObject extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		XMLConverter xmlConverter = new XMLConverter();
 		return xmlConverter.convertXMLToJSON(metadata, fileData);
 	}
 
-	public JSONObject extractJSONAndConvert(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONObject extractJSONAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		JSONConverter jsonConverter = new JSONConverter();

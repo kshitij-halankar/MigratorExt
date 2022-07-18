@@ -38,6 +38,11 @@ public class Constants {
 	public static final String XML = "XML";
 	public static final String JSON = "JSON";
 
+	// sql query
+	public static final String SQL_INSERT = "INSERT INTO ";
+	public static final String SQL_VALUES = " VALUES ";
+	public static final int BATCH_SIZE = 1000;
+
 //	public static final String DB_PASSWORD = "dbPassword";
 //	public static final String OUTPUT_SOURCE = "outputSource";
 //	public static final String OUTPUT_TYPE = "outputType";
