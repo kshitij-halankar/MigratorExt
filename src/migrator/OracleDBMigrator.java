@@ -18,7 +18,7 @@ import utils.Constants;
 
 public class OracleDBMigrator {
 
-	public int[] insertCSVData(JSONObject metadata, CSVReader csvReader, String sql)
+	public int[] insertCSVData(JSONObject entity, CSVReader csvReader, String sql, List<Integer> columnNumber)
 			throws SQLException, CsvValidationException, IOException {
 		// convert CSV to SQL
 		String[] row = null;
@@ -30,19 +30,24 @@ public class OracleDBMigrator {
 			/*
 			 * iterate array to only select required columns
 			 */
-			for (int j = 1; j < row.length; j++) {
-				p.setString(j, row[j]);
+			for (int j = 0; j < columnNumber.size(); j++) {
+				// - p.setString(j, row[columnNumber.get(j)]);
+				System.out.print(row[columnNumber.get(j)] + ", ");
 			}
+			System.out.println();
+//			for (int j = 1; j < row.length; j++) {
+//				p.setString(j, row[j]);
+//			}
 			p.addBatch();
 			p.clearParameters();
 			batchSize++;
 			if (batchSize == Constants.BATCH_SIZE) {
-				insertResult = p.executeBatch();
+				// - insertResult = p.executeBatch();
 				batchSize = 0;
 			}
 		}
 		if (batchSize > 0) {
-			insertResult = p.executeBatch();
+			// - insertResult = p.executeBatch();
 		}
 		return insertResult;
 	}
