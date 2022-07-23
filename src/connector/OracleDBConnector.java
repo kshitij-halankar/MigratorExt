@@ -2,12 +2,25 @@ package connector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+import oracle.jdbc.pool.OracleDataSource;
+import oracle.jdbc.OracleConnection;
+import java.sql.DatabaseMetaData;
 
 public class OracleDBConnector {
 
 	String dbURL = "";
 	String dbUsername = "";
 	String dbPass = "";
+
+	final static String DB_URL = "jdbc:oracle:thin:@db20220717220553_high?TNS_ADMIN=./Wallet_DB20220717220553";
+	final static String DB_USER = "ADMIN";
+	final static String DB_PASSWORD = "4X&SAR$Pe2K@NM63";
 
 //	try (Connection conn = DriverManager.getConnection(
 //            "jdbc:oracle:thin:@localhost:1521:orcl", "system", "Password123")) {
@@ -36,13 +49,33 @@ public class OracleDBConnector {
 		this.dbPass = dbPass;
 	}
 
-	public Connection getConnection() {
-		Connection conn = null;
-		try {
-			conn = DriverManager.getConnection(dbURL, dbUsername, dbPass);
-		} catch (Exception ex) {
+//	public Connection getConnection() {
+//		Connection conn = null;
+//		try {
+//			conn = DriverManager.getConnection(dbURL, dbUsername, dbPass);
+//		} catch (Exception ex) {
+//
+//		}
+//		return conn;
+//	}
 
+	public Connection getConnection() throws SQLException {
+		Properties info = new Properties();
+		info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
+		info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);
+		info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");
+		OracleDataSource ods = new OracleDataSource();
+		ods.setURL(DB_URL);
+		ods.setConnectionProperties(info);
+		System.out.println(System.getProperty("user.dir"));
+		try (Connection connection = ods.getConnection()) {
+			DatabaseMetaData dbmd = connection.getMetaData();
+			System.out.println("Driver Name: " + dbmd.getDriverName());
+//			System.out.println("Driver Version: " + dbmd.getDriverVersion());
+////		System.out.println("Default Row Prefetch Value is: " +
+//			System.out.println("Database Username is: " + connection.getUserName());
+			System.out.println();
+			return connection;
 		}
-		return conn;
 	}
 }

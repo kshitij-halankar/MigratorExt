@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.Constants;
@@ -17,9 +18,9 @@ public class XMLConverter {
 
 	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
 		
-		Strind xmlData = readMetadata(fileData);
-		JSONObject xmlTojson = XML.toJSONObject(xmlData);
-		System.out.println("json data"+xmlTojson);
+//		String xmlData = readMetadata(fileData);
+//		JSONObject xmlTojson = XML.toJSONObject(xmlData);
+//		System.out.println("json data"+xmlTojson);
 		
 		//open metadata file
 		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
@@ -37,7 +38,7 @@ public class XMLConverter {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
 			//might change food later while testing
-			JSONArray test = xmlTojson.getJSONObject(metadata.get(Constants.INPUT_ENTITY_NAME)).getJSONArray("food");
+			JSONArray test = null;//xmlTojson.getJSONObject(metadata.get(Constants.INPUT_ENTITY_NAME)).getJSONArray("food");
 			JSONObject food = new JSONObject();
 			for (int j = 0; j < mappings.length(); j++) {
 				
@@ -49,7 +50,8 @@ public class XMLConverter {
 			}	
 		}
 		//JSONObject menu = null;
-		return menu;
+//		return menu;
+		return null;
 	}
 
 	public JSONObject convertXMLToSQLAndInsert(JSONObject metadata) {

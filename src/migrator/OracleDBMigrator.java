@@ -1,6 +1,7 @@
 package migrator;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -19,7 +20,8 @@ public class OracleDBMigrator {
 		// convert CSV to SQL
 		String[] row = null;
 		OracleDBConnector oracleDBConnector = new OracleDBConnector();
-		PreparedStatement p = oracleDBConnector.getConnection().prepareStatement(sql);
+		Connection conn = oracleDBConnector.getConnection();
+		PreparedStatement p = conn.prepareStatement(sql);
 		int batchSize = 0;
 		int[] insertResult = null;
 		while ((row = csvReader.readNext()) != null) {
