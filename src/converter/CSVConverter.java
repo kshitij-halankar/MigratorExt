@@ -3,6 +3,8 @@ package converter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,12 +51,14 @@ public class CSVConverter {
 				sql += "(";
 				String columns = "";
 				int columnCount = 0;
+				List<Integer> columnNumber = new ArrayList<>();
 				for (String attribute : headers) {
 //					System.out.println(attribute);
 					for (int j = 0; j < mappings.length(); j++) {
 						if (mappings.getJSONObject(j).getString(Constants.INPUT_ATTRIBUTE_NAME).equals(attribute)) {
 							columns += mappings.getJSONObject(j).getString(Constants.OUTPUT_ATTRIBUTE_NAME) + ", ";
 							columnCount++;
+							columnNumber.add(j);
 						}
 					}
 				}
@@ -68,7 +72,7 @@ public class CSVConverter {
 				System.out.println("sql: " + sql);
 
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertCSVData(entity, csvReader, sql);
+				oracleDBMigrator.insertCSVData(entity, csvReader, sql, columnNumber);
 
 			}
 //			lineReader.close();

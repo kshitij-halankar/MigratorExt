@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/kshit/Documents/MAC/ADT/Project/v1/MigratorExt/libs/json-20220320.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kshit/Documents/MAC/ADT/Project/v1/MigratorExt/libs/opencsv-5.6.jar"/>
 	<classpathentry kind="lib" path="C:/Users/kshit/Documents/MAC/ADT/Project/v1/MigratorExt/libs/commons-lang3-3.12.0.jar"/>
@@ -10,5 +11,12 @@
 	<classpathentry kind="lib" path="libs/osdt_core.jar"/>
 	<classpathentry kind="lib" path="libs/opencsv-5.6.jar"/>
 	<classpathentry kind="lib" path="libs/oraclepki.jar"/>
+=======
+	<classpathentry kind="lib" path="libs/mongo-java-driver-3.12.11.jar"/>
+	<classpathentry kind="lib" path="libs/commons-lang3-3.12.0.jar"/>
+	<classpathentry kind="lib" path="libs/json-20220320.jar"/>
+	<classpathentry kind="lib" path="libs/ojdbc8-21.6.0.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/opencsv-5.6.jar"/>
+>>>>>>> afa6966f126382ce9d631501f31cb55e5bae462d
 	<classpathentry kind="output" path="bin"/>
 </classpath>
