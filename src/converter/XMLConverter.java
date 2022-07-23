@@ -4,13 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-<<<<<<< HEAD
-=======
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
->>>>>>> afa6966f126382ce9d631501f31cb55e5bae462d
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
@@ -22,24 +19,21 @@ import utils.Constants;
 public class XMLConverter {
 
 	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
-<<<<<<< HEAD
-		
+
 //		String xmlData = readMetadata(fileData);
 //		JSONObject xmlTojson = XML.toJSONObject(xmlData);
 //		System.out.println("json data"+xmlTojson);
-		
-		//open metadata file
+
+		// open metadata file
 		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
-		//JSONObject metadata = readMetadata(input);
-	    System.out.println("metadata file: "+metadata);
-	    
-	    JSONObject schema = metadata.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema");
-	    JSONArray entities = schema.getJSONArray("Entities");
-		
-		System.out.println("schema: "+schema);
-		System.out.println("entities: "+entities);
-		
-=======
+		// JSONObject metadata = readMetadata(input);
+		System.out.println("metadata file: " + metadata);
+
+		JSONObject schema = metadata.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema");
+		JSONArray entities = schema.getJSONArray("Entities");
+
+		System.out.println("schema: " + schema);
+		System.out.println("entities: " + entities);
 
 		JSONObject xmlTojson = XML.toJSONObject(fileData.toString());
 		System.out.println("json data" + xmlTojson);
@@ -49,24 +43,12 @@ public class XMLConverter {
 		// JSONObject metadata = readMetadata(input);
 //		System.out.println("metadata file: " + metadata);
 
-		JSONObject schema = metadata.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema");
-		JSONArray entities = schema.getJSONArray("Entities");
-
-		System.out.println("schema: " + schema);
-		System.out.println("entities: " + entities);
-
->>>>>>> afa6966f126382ce9d631501f31cb55e5bae462d
 		JSONArray menu = new JSONArray();
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
-<<<<<<< HEAD
-			//might change food later while testing
-			JSONArray test = null;//xmlTojson.getJSONObject(metadata.get(Constants.INPUT_ENTITY_NAME)).getJSONArray("food");
-=======
 			// might change food later while testing
 			JSONArray test = xmlTojson.getJSONArray(metadata.getString(Constants.INPUT_ENTITY_NAME));
->>>>>>> afa6966f126382ce9d631501f31cb55e5bae462d
 			JSONObject food = new JSONObject();
 			for (int j = 0; j < mappings.length(); j++) {
 
@@ -77,11 +59,8 @@ public class XMLConverter {
 				menu.put(food);
 			}
 		}
-<<<<<<< HEAD
-		//JSONObject menu = null;
+		// JSONObject menu = null;
 //		return menu;
-		return null;
-=======
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
@@ -89,7 +68,6 @@ public class XMLConverter {
 		// JSONObject menu = null;
 		JSONObject response = new JSONObject();
 		return response;
->>>>>>> afa6966f126382ce9d631501f31cb55e5bae462d
 	}
 
 	public JSONObject convertAndInsertXMLToSQL(JSONObject metadata) {

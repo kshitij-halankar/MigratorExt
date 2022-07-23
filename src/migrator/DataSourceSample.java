@@ -1,3 +1,5 @@
+package migrator;
+
 /* Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.*/
 /*
    DESCRIPTION    
@@ -54,33 +56,33 @@ public class DataSourceSample {
   * There are many other connection related properties. Refer to 
   * the OracleConnection interface to find more. 
   */
-  public static void main(String args[]) throws SQLException {
-    System.out.println("Started");
-    Properties info = new Properties();     
-    info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
-    info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);          
-    info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");    
-  
-
-    OracleDataSource ods = new OracleDataSource();
-    ods.setURL(DB_URL);    
-    ods.setConnectionProperties(info);
-
-    // With AutoCloseable, the connection is closed automatically.
-    try (OracleConnection connection = (OracleConnection) ods.getConnection()) {
-      // Get the JDBC driver name and version 
-      DatabaseMetaData dbmd = connection.getMetaData();       
-      System.out.println("Driver Name: " + dbmd.getDriverName());
-      System.out.println("Driver Version: " + dbmd.getDriverVersion());
-      // Print some connection properties
-      System.out.println("Default Row Prefetch Value is: " + 
-         connection.getDefaultRowPrefetch());
-      System.out.println("Database Username is: " + connection.getUserName());
-      System.out.println();
-      // Perform a database operation 
-      printEmployees(connection);
-    }   
-  }
+//  public static void main(String args[]) throws SQLException {
+//    System.out.println("Started");
+//    Properties info = new Properties();     
+//    info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
+//    info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);          
+//    info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");    
+//  
+//
+//    OracleDataSource ods = new OracleDataSource();
+//    ods.setURL(DB_URL);    
+//    ods.setConnectionProperties(info);
+//
+//    // With AutoCloseable, the connection is closed automatically.
+//    try (OracleConnection connection = (OracleConnection) ods.getConnection()) {
+//      // Get the JDBC driver name and version 
+//      DatabaseMetaData dbmd = connection.getMetaData();       
+//      System.out.println("Driver Name: " + dbmd.getDriverName());
+//      System.out.println("Driver Version: " + dbmd.getDriverVersion());
+//      // Print some connection properties
+//      System.out.println("Default Row Prefetch Value is: " + 
+//         connection.getDefaultRowPrefetch());
+//      System.out.println("Database Username is: " + connection.getUserName());
+//      System.out.println();
+//      // Perform a database operation 
+//      printEmployees(connection);
+//    }   
+//  }
  /*
   * Displays first_name and last_name from the employees table.
   */
