@@ -18,7 +18,7 @@ import utils.Constants;
 
 public class XMLConverter {
 
-	public JSONArray convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
+	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
 
 		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
 		System.out.println("metadata file: " + metadata);
@@ -36,7 +36,6 @@ public class XMLConverter {
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
-			// might change food later while testing
 			JSONArray test = xmlTojson.getJSONArray(metadata.getString(Constants.INPUT_ENTITY_NAME));
 			JSONObject food = new JSONObject();
 			for (int j = 0; j < mappings.length(); j++) {
@@ -51,7 +50,7 @@ public class XMLConverter {
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
-		JSONArray response = new JSONArray();
+		JSONObject response = new JSONObject();
 		return response;
 	}
 

@@ -20,22 +20,23 @@ import java.util.HashMap;
 
 public class CSVConverter {
 
-	public JSONArray convertCSVToJSON(JSONObject metadata) {
-		JSONArray response = null;
+	public JSONObject convertCSVToJSON(JSONObject metadata) {
+		JSONObject response = null;
 		   try {
+			   System.out.println(metadata);
 	            int i, j;
 	            HashMap map = new HashMap<>(), attributes = new HashMap();
 	            String[] nextRecord;
 	            boolean readAttributes = false;
 	            JSONArray records = new JSONArray();
 	            JSONObject rootObject = metadata;
-	            JSONArray metaRecords = rootObject.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema").getJSONArray("Entities");
+	            JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
 	            for (i = 0; i < metaRecords.length(); i++) {
 	                JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
 	                for ( j = 0; j < mappings.length(); j++)
 	                    map.put(mappings.getJSONObject(j).getString("InputAttributeName"),mappings.getJSONObject(j).getString("OutputAttributeName"));
 
-	                FileReader filereader = new FileReader(rootObject.getJSONArray("MigratorExt").getJSONObject(0).getString("InputSource"));
+	                FileReader filereader = new FileReader(rootObject.getString("InputSource"));
 	                CSVReader csvReader = new CSVReader(filereader);
 	                while ((nextRecord = csvReader.readNext()) != null) {
 	                    if (!readAttributes) {
