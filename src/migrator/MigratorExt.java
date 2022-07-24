@@ -75,7 +75,8 @@ public class MigratorExt {
 					case Constants.ORACLE:
 						break;
 					case Constants.CSV:
-						extractedData = fileExtractor.extractCSVAndConvertForMongo(metadataObj);
+						CSVConverter csvConverter = new CSVConverter();
+						extractedData = csvConverter.convertCSVToJSON(metadata);;
 						break;
 					case Constants.JSON:
 						extractedData = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
