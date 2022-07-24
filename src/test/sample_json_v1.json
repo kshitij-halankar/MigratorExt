@@ -1,0 +1,23 @@
+{
+    "data":[{
+        "EmpId":"10",
+        "EmpName":"saf",
+        "Salary":"20000",
+        "City":"WUAWD",
+    },{
+        "EmpId":"11",
+        "EmpName":"fds",
+        "Salary":"30000",
+        "City":"xcv",
+    },{
+        "EmpId":"12",
+        "EmpName":"rty",
+        "Salary":"40000",
+        "City":"sfd",
+    },{
+        "EmpId":"13",
+        "EmpName":"QWER",
+        "Salary":"10000",
+        "City":"wer",
+    }]
+}
