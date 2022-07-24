@@ -31,7 +31,7 @@ public class FileExtractor {
 		return xmlConverter.convertXMLToJSON(metadata, fileData);
 	}
 
-	public JSONObject extractJSONAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONArray extractJSONAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		JSONConverter jsonConverter = new JSONConverter();

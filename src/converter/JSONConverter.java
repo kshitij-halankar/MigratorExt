@@ -9,8 +9,9 @@ import utils.Constants;
 
 public class JSONConverter {
 
-	public JSONObject convertJSONToBSON(JSONObject metadata, StringBuilder fileData) {
-		JSONObject result = null;
+	public JSONArray convertJSONToBSON(JSONObject metadata, StringBuilder fileData) {
+		JSONArray result = null;
+		
 		return result;
 	}
 

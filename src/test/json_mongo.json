@@ -2,40 +2,26 @@
 	"MigratorExt": [
 		{
 			"InputSourceType": "JSON",
-			"InputSource": "<Directory Path>",
+			"InputSource": "C:/Users/gopik/Downloads/sample1.json",
 			"OutputSourceType": "Mongo",
 			"OutputSource": "<hostname:port:SID>",
 			"OutputSourceLoginUsername": "<Username>",
 			"OutputSourceLoginPassword": "<Password>",
 			"Schema": {
 				"InputSchema": "<SchemaName>",
-				"OutputSchema": "<SchemaName>",
+				"OutputSchema": "JsonMongoTestDatabase",
 				"Entities": [
 					{
 						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName1>",
+						"OutputEntityName": "JsonMongoTestCollection",
 						"Mappings": [
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "month",
+								"OutputAttributeName": "Changed Month"
 							},
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							}
-						]
-					},
-					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName2>",
-						"Mappings": [
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							},
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "year 2005",
+								"OutputAttributeName": "2005"
 							}
 						]
 					}

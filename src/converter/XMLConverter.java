@@ -36,7 +36,6 @@ public class XMLConverter {
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
-			// might change food later while testing
 			JSONArray test = xmlTojson.getJSONArray(metadata.getString(Constants.INPUT_ENTITY_NAME));
 			JSONObject food = new JSONObject();
 			for (int j = 0; j < mappings.length(); j++) {
