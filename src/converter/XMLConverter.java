@@ -18,7 +18,7 @@ import utils.Constants;
 
 public class XMLConverter {
 
-	public JSONArray convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
+	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
 
 		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
 		System.out.println("metadata file: " + metadata);
@@ -50,7 +50,7 @@ public class XMLConverter {
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
-		JSONArray response = new JSONArray();
+		JSONObject response = new JSONObject();
 		return response;
 	}
 

@@ -1,0 +1,48 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "Oracle",
+			"InputSource": "jdbc:oracle:thin:@db20220717220553_high?TNS_ADMIN=./Wallet_DB20220717220553",
+			"InputSourceLoginUsername": "ADMIN",
+			"InputSourceLoginPassword": "4X&SAR$Pe2K@NM63",
+			"OutputSourceType": "Mongo",
+			"OutputSource": "<hostname:port:SID>",
+			"OutputSourceLoginUsername": "<Username>",
+			"OutputSourceLoginPassword": "<Password>",
+			"Schema": {
+				"InputSchema": "<SchemaName>",
+				"OutputSchema": "<SchemaName>",
+				"Entities": [
+					{
+						"InputEntityName": "<TableName1>",
+						"OutputEntityName": "<CollectionName1>",
+						"Mappings": [
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							},
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							}
+						]
+					},
+					{
+						"InputEntityName": "<TableName2>",
+						"OutputEntityName": "<CollectionName2>",
+						"Mappings": [
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							},
+							{
+								"InputAttributeName": "<InputAttributeName>",
+								"OutputAttributeName": "<OutputAttributeName>"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

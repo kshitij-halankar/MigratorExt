@@ -1,17 +1,49 @@
 package converter;
 
+import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import metadata.MetadataParser;
+import migrator.MongoDBMigrator;
 import migrator.OracleDBMigrator;
 import utils.Constants;
 
 public class JSONConverter {
 
-	public JSONArray convertJSONToBSON(JSONObject metadata, StringBuilder fileData) {
-		JSONArray result = null;
-		
+	public JSONObject insertJSONToMongo(JSONObject metadata, JSONObject fileData) {
+		JSONObject result = null;
+		JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
+		JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
+		for (int i = 0; i < entities.length(); i++) {
+			JSONObject entity = entities.getJSONObject(i);
+			JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
+			String collectionName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
+			JSONArray records = new JSONArray();
+			JSONObject mappingAttributes = new JSONObject();
+			for (int k = 0; k < mappings.length(); k++) {
+				mappingAttributes.put(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME),
+						mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME));
+			}
+			System.out.println(mappingAttributes);
+//			System.out.println(fileData.toString());
+			JSONArray fileDataArray = fileData.getJSONArray(schema.getString(Constants.INPUT_SCHEMA));
+			for (int j = 0; j < fileDataArray.length(); j++) {
+				JSONObject data = new JSONObject();
+
+				JSONObject dataRow = fileDataArray.getJSONObject(j);
+				Iterator<String> dataRowKeys = mappingAttributes.keys();
+				while (dataRowKeys.hasNext()) {
+					String key = dataRowKeys.next();
+					data.put(mappingAttributes.getString(key), dataRow.getString(key));
+				}
+				records.put(data);
+			}
+			System.out.println(records.toString());
+			MongoDBMigrator mongoMigrator = new MongoDBMigrator();
+			mongoMigrator.insertData(metadata, records);
+		}
 		return result;
 	}
 

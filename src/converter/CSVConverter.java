@@ -20,8 +20,8 @@ import java.util.HashMap;
 
 public class CSVConverter {
 
-	public JSONArray convertCSVToJSON(JSONObject metadata) {
-		JSONArray response = null;
+	public JSONObject convertCSVToJSON(JSONObject metadata) {
+		JSONObject response = null;
 		   try {
 	            int i, j;
 	            HashMap map = new HashMap<>(), attributes = new HashMap();

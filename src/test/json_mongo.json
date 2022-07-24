@@ -2,13 +2,13 @@
 	"MigratorExt": [
 		{
 			"InputSourceType": "JSON",
-			"InputSource": "C:/Users/gopik/Downloads/sample1.json",
+			"InputSource": "src/test/sample1.json",
 			"OutputSourceType": "Mongo",
 			"OutputSource": "<hostname:port:SID>",
 			"OutputSourceLoginUsername": "<Username>",
 			"OutputSourceLoginPassword": "<Password>",
 			"Schema": {
-				"InputSchema": "<SchemaName>",
+				"InputSchema": "data",
 				"OutputSchema": "JsonMongoTestDatabase",
 				"Entities": [
 					{

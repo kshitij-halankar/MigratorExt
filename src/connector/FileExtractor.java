@@ -24,18 +24,18 @@ public class FileExtractor {
 //		return csvConverter.convertCSVToJSON(metadata, fileData);
 //	}
 
-	public JSONArray extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONObject extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		XMLConverter xmlConverter = new XMLConverter();
 		return xmlConverter.convertXMLToJSON(metadata, fileData);
 	}
 
-	public JSONArray extractJSONAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONObject extractJSONAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		JSONConverter jsonConverter = new JSONConverter();
-		return jsonConverter.convertJSONToBSON(metadata, fileData);
+		return jsonConverter.insertJSONToMongo(metadata, new JSONObject(fileData.toString()));
 	}
 
 	public StringBuilder getFile(String filePath) throws IOException {

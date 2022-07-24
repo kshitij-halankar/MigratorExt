@@ -83,13 +83,13 @@ public class MigratorExt {
 						break;
 					case Constants.CSV:
 						CSVConverter csvConverter = new CSVConverter();
-						extractedData = csvConverter.convertCSVToJSON(metadata);
+						response = csvConverter.convertCSVToJSON(metadata);
 						break;
 					case Constants.JSON:
-						extractedData = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
+						response = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
 						break;
 					case Constants.XML:
-						extractedData = fileExtractor.extractXMLAndConvertForMongo(metadataObj);
+						response = fileExtractor.extractXMLAndConvertForMongo(metadataObj);
 						break;
 					}
 					MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
