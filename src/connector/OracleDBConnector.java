@@ -18,9 +18,10 @@ public class OracleDBConnector {
 	String dbUsername = "";
 	String dbPass = "";
 
-	final static String DB_URL = "jdbc:oracle:thin:@db20220717220553_high?TNS_ADMIN=./Wallet_DB20220717220553";
-	final static String DB_USER = "ADMIN";
-	final static String DB_PASSWORD = "4X&SAR$Pe2K@NM63";
+//	final static String DB_URL = "jdbc:oracle:thin:@db20220717220553_high?TNS_ADMIN=./Wallet_DB20220717220553";
+	final static String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe";
+	final static String DB_USER = "SYSTEM";
+	final static String DB_PASSWORD = "12345678";
 
 //	try (Connection conn = DriverManager.getConnection(
 //            "jdbc:oracle:thin:@localhost:1521:orcl", "system", "Password123")) {
@@ -60,22 +61,24 @@ public class OracleDBConnector {
 //	}
 
 	public Connection getConnection() throws SQLException {
-		Properties info = new Properties();
-		info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
-		info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);
-		info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");
-		OracleDataSource ods = new OracleDataSource();
-		ods.setURL(DB_URL);
-		ods.setConnectionProperties(info);
-		System.out.println(System.getProperty("user.dir"));
-		try (Connection connection = ods.getConnection()) {
-			DatabaseMetaData dbmd = connection.getMetaData();
-			System.out.println("Driver Name: " + dbmd.getDriverName());
-//			System.out.println("Driver Version: " + dbmd.getDriverVersion());
-////		System.out.println("Default Row Prefetch Value is: " +
-//			System.out.println("Database Username is: " + connection.getUserName());
-			System.out.println();
-			return connection;
-		}
+		Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+		return con;
+//		Properties info = new Properties();
+//		info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);
+//		info.put(OracleConnection.CONNECTION_PROPERTY_PASSWORD, DB_PASSWORD);
+////		info.put(OracleConnection.CONNECTION_PROPERTY_DEFAULT_ROW_PREFETCH, "20");
+//		OracleDataSource ods = new OracleDataSource();
+//		ods.setURL(DB_URL);
+//		ods.setConnectionProperties(info);
+//		System.out.println(System.getProperty("user.dir"));
+//		try (Connection connection = ods.getConnection()) {
+//			DatabaseMetaData dbmd = connection.getMetaData();
+//			System.out.println("Driver Name: " + dbmd.getDriverName());
+////			System.out.println("Driver Version: " + dbmd.getDriverVersion());
+//////		System.out.println("Default Row Prefetch Value is: " +
+////			System.out.println("Database Username is: " + connection.getUserName());
+//			System.out.println();
+//			return connection;
+//		}
 	}
 }
