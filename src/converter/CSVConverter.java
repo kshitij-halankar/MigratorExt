@@ -20,6 +20,7 @@ import java.util.HashMap;
 public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata) {
+		JSONObject response = null;
 		   try {
 	            int i, j;
 	            HashMap map = new HashMap<>(), attributes = new HashMap();
@@ -56,8 +57,8 @@ public class CSVConverter {
 	                    }
 	                }
 	            }
+	         
 
-	            writeToFile(targetFileName, records.toString());
 
 	        } catch (FileNotFoundException e) {
 	            e.printStackTrace();
@@ -67,7 +68,7 @@ public class CSVConverter {
 	            e.printStackTrace();
 	        }
 		
-		
+		   return response;
 		
 		
 		
