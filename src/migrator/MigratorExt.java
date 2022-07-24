@@ -22,8 +22,8 @@ public class MigratorExt {
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
-//		String input = "src\\test\\csv_mongo.json";
-		String input = "src\\test\\json_mongo.json";
+		String input = "src\\test\\csv_mongo.json";
+//		String input = "src\\test\\json_mongo.json";
 		System.out.println(System.getProperty("user.dir"));
 		try {
 //			MetadataParser metadataParser = new MetadataParser();
@@ -83,7 +83,7 @@ public class MigratorExt {
 						break;
 					case Constants.CSV:
 						CSVConverter csvConverter = new CSVConverter();
-						response = csvConverter.convertCSVToJSON(metadata);
+						response = csvConverter.convertCSVToJSON(metadataObj);
 						break;
 					case Constants.JSON:
 						response = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
