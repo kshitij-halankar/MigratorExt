@@ -22,7 +22,8 @@ public class MigratorExt {
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
-		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
+		String input = "src\\test\\csv_mongo.json";
+		System.out.println(System.getProperty("user.dir"));
 		try {
 //			MetadataParser metadataParser = new MetadataParser();
 //			JSONObject metadata = metadataParser.parseMetadata(input);
@@ -52,7 +53,7 @@ public class MigratorExt {
 			for (int i = 0; i < migratorExt.length(); i++) {
 				JSONObject metadataObj = migratorExt.getJSONObject(i);
 				FileExtractor fileExtractor = new FileExtractor();
-				JSONObject extractedData = null;
+				JSONArray extractedData = null;
 
 				if (metadataObj.getString(Constants.OUTPUT_SOURCE_TYPE).toString().equals(Constants.ORACLE)) {
 					// connect to input source & extract data
@@ -81,10 +82,10 @@ public class MigratorExt {
 						break;
 					case Constants.CSV:
 						CSVConverter csvConverter = new CSVConverter();
-						extractedData = csvConverter.convertCSVToJSON(metadata);;
+						extractedData = csvConverter.convertCSVToJSON(metadata);
 						break;
 					case Constants.JSON:
-						extractedData = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
+						//extractedData = fileExtractor.extractJSONAndConvertForMongo(metadataObj);
 						break;
 					case Constants.XML:
 						extractedData = fileExtractor.extractXMLAndConvertForMongo(metadataObj);

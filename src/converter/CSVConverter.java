@@ -13,14 +13,15 @@ import org.json.JSONObject;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import connector.OracleDBConnector;
+import migrator.MongoDBMigrator;
 import migrator.OracleDBMigrator;
 import utils.Constants;
 import java.util.HashMap;
 
 public class CSVConverter {
 
-	public JSONObject convertCSVToJSON(JSONObject metadata) {
-		JSONObject response = null;
+	public JSONArray convertCSVToJSON(JSONObject metadata) {
+		JSONArray response = null;
 		   try {
 	            int i, j;
 	            HashMap map = new HashMap<>(), attributes = new HashMap();
@@ -57,7 +58,8 @@ public class CSVConverter {
 	                    }
 	                }
 	            }
-	         
+	            MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
+	 		   mongoMigrator.insertData(metadata, records);
 
 
 	        } catch (FileNotFoundException e) {
@@ -67,7 +69,7 @@ public class CSVConverter {
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
-		
+		  
 		   return response;
 		
 		

@@ -18,15 +18,9 @@ import utils.Constants;
 
 public class XMLConverter {
 
-	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
+	public JSONArray convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
 
-//		String xmlData = readMetadata(fileData);
-//		JSONObject xmlTojson = XML.toJSONObject(xmlData);
-//		System.out.println("json data"+xmlTojson);
-
-		// open metadata file
 		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
-		// JSONObject metadata = readMetadata(input);
 		System.out.println("metadata file: " + metadata);
 
 		JSONObject schema = metadata.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema");
@@ -37,11 +31,6 @@ public class XMLConverter {
 
 		JSONObject xmlTojson = XML.toJSONObject(fileData.toString());
 		System.out.println("json data" + xmlTojson);
-
-		// open metadata file
-		// String input = "D:\\temp\\src\\temp\\xml_mongo.json";
-		// JSONObject metadata = readMetadata(input);
-//		System.out.println("metadata file: " + metadata);
 
 		JSONArray menu = new JSONArray();
 		for (int i = 0; i < entities.length(); i++) {
@@ -59,14 +48,10 @@ public class XMLConverter {
 				menu.put(food);
 			}
 		}
-		// JSONObject menu = null;
-//		return menu;
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
-		mongoDBMigrator.insertData(metadata, convertedData);
-		// JSONObject menu = null;
-		JSONObject response = new JSONObject();
+		JSONArray response = new JSONArray();
 		return response;
 	}
 

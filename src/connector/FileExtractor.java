@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import converter.CSVConverter;
 import converter.JSONConverter;
@@ -22,7 +24,7 @@ public class FileExtractor {
 //		return csvConverter.convertCSVToJSON(metadata, fileData);
 //	}
 
-	public JSONObject extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
+	public JSONArray extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		XMLConverter xmlConverter = new XMLConverter();

@@ -1,46 +1,32 @@
 {
 	"MigratorExt": [
-		{
-			"InputSourceType": "CSV",
-			"InputSource": "<Directory Path>",
-			"OutputSourceType": "Mongo",
-			"OutputSource": "<hostname:port:SID>",
-			"OutputSourceLoginUsername": "<Username>",
-			"OutputSourceLoginPassword": "<Password>",
-			"Schema": {
-				"InputSchema": "<SchemaName>",
-				"OutputSchema": "<SchemaName>",
-				"Entities": [
-					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName1>",
-						"Mappings": [
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							},
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							}
-						]
-					},
-					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName2>",
-						"Mappings": [
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							},
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							}
-						]
-					}
-				]
+	  {
+		"InputSourceType": "CSV",
+		"InputSource": "C:\\Users\\gopik\\Downloads\\sample1.csv",
+		"OutputSourceType": "Mongo",
+		"OutputSource": "<hostname:port:SID>",
+		"OutputSourceLoginUsername": "<Username>",
+		"OutputSourceLoginPassword": "<Password>",
+		"Schema": {
+		  "InputSchema": "<SchemaName>",
+		  "OutputSchema": "CsvTestDatabase",
+		  "Entities": [
+			{
+			  "InputEntityName": "<EntityName>",
+			  "OutputEntityName": "CsvTestCollection",
+			  "Mappings": [
+				{
+				  "InputAttributeName": "Month",
+				  "OutputAttributeName": "month"
+				},
+				{
+				  "InputAttributeName": "2005",
+				  "OutputAttributeName": "year 2005"
+				}
+			  ]
 			}
+		  ]
 		}
+	  }
 	]
-}
+  }
