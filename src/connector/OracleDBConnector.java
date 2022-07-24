@@ -60,8 +60,8 @@ public class OracleDBConnector {
 //		return conn;
 //	}
 
-	public Connection getConnection() throws SQLException {
-		Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+	public Connection getConnection(String dbURL, String dbUser, String dbPassword) throws SQLException {
+		Connection con = DriverManager.getConnection(dbURL, dbUser, dbPassword);
 		return con;
 //		Properties info = new Properties();
 //		info.put(OracleConnection.CONNECTION_PROPERTY_USER_NAME, DB_USER);

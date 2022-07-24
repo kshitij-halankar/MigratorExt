@@ -19,12 +19,17 @@ import utils.Constants;
 
 public class OracleDBMigrator {
 
-	public int[] insertCSVData(JSONObject entity, CSVReader csvReader, String sql, List<Integer> columnNumber)
-			throws SQLException, CsvValidationException, IOException {
+	public int[] insertCSVData(JSONObject metadata, JSONObject entity, CSVReader csvReader, String sql,
+			List<Integer> columnNumber) throws SQLException, CsvValidationException, IOException {
 		// convert CSV to SQL
 		String[] row = null;
+
+		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
+		String dbUserName = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_USERNAME).toString();
+		String dbPassword = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_PASSWORD).toString();
+
 		OracleDBConnector oracleDBConnector = new OracleDBConnector();
-		Connection conn = oracleDBConnector.getConnection();
+		Connection conn = oracleDBConnector.getConnection(dbURL, dbUserName, dbPassword);
 		PreparedStatement p = conn.prepareStatement(sql);
 		int batchSize = 0;
 		int[] insertResult = null;
@@ -33,8 +38,8 @@ public class OracleDBMigrator {
 			 * iterate array to only select required columns
 			 */
 			for (int j = 1; j <= columnNumber.size(); j++) {
-				p.setString(j, row[columnNumber.get(j-1)]);
-				System.out.print(row[columnNumber.get(j-1)] + ", ");
+				p.setString(j, row[columnNumber.get(j - 1)]);
+				System.out.print(row[columnNumber.get(j - 1)] + ", ");
 			}
 			System.out.println();
 //			for (int j = 1; j < row.length; j++) {
@@ -57,8 +62,11 @@ public class OracleDBMigrator {
 	public int[] insertJSONData(JSONObject metadata, JSONArray dataArray, String sql, String entity)
 			throws SQLException {
 		int[] insertResult = null;
+		String dbURL = metadata.get(Constants.INPUT_SOURCE).toString();
+		String dbUserName = metadata.get(Constants.INPUT_SOURCE_LOGIN_USERNAME).toString();
+		String dbPassword = metadata.get(Constants.INPUT_SOURCE_LOGIN_PASSWORD).toString();
 		OracleDBConnector oracleDBConnector = new OracleDBConnector();
-		PreparedStatement p = oracleDBConnector.getConnection().prepareStatement(sql);
+		PreparedStatement p = oracleDBConnector.getConnection(dbURL, dbUserName, dbPassword).prepareStatement(sql);
 		int batchSize = 0;
 
 		JSONArray entities = metadata.getJSONObject(Constants.SCHEMA).getJSONArray(Constants.ENTITIES);

@@ -166,7 +166,7 @@ public class CSVConverter {
 				System.out.println("sql: " + sql);
 
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertCSVData(entity, csvReader, sql, columnNumber);
+				oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber);
 
 			}
 //			lineReader.close();
