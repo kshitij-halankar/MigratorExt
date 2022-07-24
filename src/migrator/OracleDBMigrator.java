@@ -32,9 +32,9 @@ public class OracleDBMigrator {
 			/*
 			 * iterate array to only select required columns
 			 */
-			for (int j = 0; j < columnNumber.size(); j++) {
-				// - p.setString(j, row[columnNumber.get(j)]);
-				System.out.print(row[columnNumber.get(j)] + ", ");
+			for (int j = 1; j <= columnNumber.size(); j++) {
+				p.setString(j, row[columnNumber.get(j-1)]);
+				System.out.print(row[columnNumber.get(j-1)] + ", ");
 			}
 			System.out.println();
 //			for (int j = 1; j < row.length; j++) {
@@ -44,12 +44,12 @@ public class OracleDBMigrator {
 			p.clearParameters();
 			batchSize++;
 			if (batchSize == Constants.BATCH_SIZE) {
-				// - insertResult = p.executeBatch();
+				insertResult = p.executeBatch();
 				batchSize = 0;
 			}
 		}
 		if (batchSize > 0) {
-			// - insertResult = p.executeBatch();
+			insertResult = p.executeBatch();
 		}
 		return insertResult;
 	}

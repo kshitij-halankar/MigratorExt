@@ -22,9 +22,10 @@ public class MigratorExt {
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
 //		String input = "C:\\Users\\kshit\\Documents\\MAC\\ADT\\Project\\v1\\MigratorExt\\src\\test\\csv_oracle_sample1.json";
-		String input = "src\\test\\csv_mongo.json";
+//		String input = "src\\test\\csv_mongo.json";
 //		String input = "src\\test\\json_mongo.json";
-		System.out.println(System.getProperty("user.dir"));
+//		System.out.println(System.getProperty("user.dir"));
+		String input = "src\\test\\csv_oracle_sample1.json";
 		try {
 //			MetadataParser metadataParser = new MetadataParser();
 //			JSONObject metadata = metadataParser.parseMetadata(input);
