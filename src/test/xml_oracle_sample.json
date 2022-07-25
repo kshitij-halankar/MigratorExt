@@ -1,0 +1,40 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "XML",
+			"InputSource": "src\\test\\sample_xml_v1.xml",
+			"OutputSourceType": "Oracle",
+			"OutputSource": "jdbc:oracle:thin:@localhost:1521:xe",
+			"OutputSourceLoginUsername": "SYSTEM",
+			"OutputSourceLoginPassword": "12345678",
+			"Schema": {
+				"InputSchema": "",
+				"OutputSchema": "EmployeeDetails",
+				"Entities": [
+					{
+						"InputEntityName": "Emp",
+						"OutputEntityName": "Emp",
+						"Mappings": [
+							{
+								"InputAttributeName": "EmpId",
+								"OutputAttributeName": "EmpId"
+							},
+							{
+								"InputAttributeName": "EmpName",
+								"OutputAttributeName": "EmployeeName"
+							},
+							{
+								"InputAttributeName": "Salary",
+								"OutputAttributeName": "EmployeeSalary"
+							},
+							{
+								"InputAttributeName": "City",
+								"OutputAttributeName": "EmployeeCity"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
