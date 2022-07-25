@@ -7,8 +7,8 @@
 			"InputSourceLoginPassword": "12345678",
 			"OutputSourceType": "Mongo",
 			"OutputSource": "mongodb://localhost:27017",
-			"OutputSourceLoginUsername": "<Username>",
-			"OutputSourceLoginPassword": "<Password>",
+			"OutputSourceLoginUsername": "sysuser",
+			"OutputSourceLoginPassword": "12345678",
 			"Schema": {
 				"InputSchema": "SYSTEM",
 				"OutputSchema": "EmployeeTest",

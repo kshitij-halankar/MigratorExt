@@ -60,14 +60,16 @@ public class MigratorExt {
 					// connect to input source & extract data
 					switch (metadataObj.get(Constants.INPUT_SOURCE_TYPE).toString()) {
 					case Constants.MONGO:
+						JSONConverter jsonConverter = new JSONConverter();
+						response = jsonConverter.fetchJSONFromMongoAndInsertToSQL(metadataObj);
 						break;
 					case Constants.CSV:
 						CSVConverter csvConverter = new CSVConverter();
 						response = csvConverter.convertCSVToSQLAndInsert(metadataObj);
 						break;
 					case Constants.JSON:
-						JSONConverter jsonConverter = new JSONConverter();
-						response = jsonConverter.convertJSONToSQLAndInsert(metadataObj);
+						JSONConverter jsonConvert = new JSONConverter();
+						response = jsonConvert.convertJSONToSQLAndInsert(metadataObj);
 						break;
 					case Constants.XML:
 						XMLConverter xmlConverter = new XMLConverter();
