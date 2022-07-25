@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,73 +24,69 @@ public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata) {
 		JSONObject response = null;
-		   try {
-			   System.out.println(metadata);
-	            int i, j, batchSize=0;
-	            HashMap map = new HashMap<>(), attributes = new HashMap();
-	            String[] nextRecord;
-	            boolean readAttributes = false;
-	            List<Document> records = new ArrayList<>();
-	            JSONObject rootObject = metadata;
-	            JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
-	            for (i = 0; i < metaRecords.length(); i++) {
-	                JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
-	                for ( j = 0; j < mappings.length(); j++)
-	                    map.put(mappings.getJSONObject(j).getString("InputAttributeName"),mappings.getJSONObject(j).getString("OutputAttributeName"));
+		try {
+			System.out.println(metadata);
+			int i, j, batchSize = 0;
+			HashMap map = new HashMap<>(), attributes = new HashMap();
+			String[] nextRecord;
+			boolean readAttributes = false;
+			List<Document> records = new ArrayList<>();
+			JSONObject rootObject = metadata;
+			JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
+			for (i = 0; i < metaRecords.length(); i++) {
+				JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
+				for (j = 0; j < mappings.length(); j++)
+					map.put(mappings.getJSONObject(j).getString("InputAttributeName"),
+							mappings.getJSONObject(j).getString("OutputAttributeName"));
 
-	                FileReader filereader = new FileReader(rootObject.getString("InputSource"));
-	                CSVReader csvReader = new CSVReader(filereader);
-	                while ((nextRecord = csvReader.readNext()) != null) {
-	                    if (!readAttributes) {
-	                        j=0;
-	                        for (String cell : nextRecord){
-	                            if(map.containsKey(cell))
-	                                attributes.put(j,map.get(cell));
-	                            j++;
-	                        }
-	                        readAttributes = true;
-	                    } else {
+				FileReader filereader = new FileReader(rootObject.getString("InputSource"));
+				CSVReader csvReader = new CSVReader(filereader);
+				while ((nextRecord = csvReader.readNext()) != null) {
+					if (!readAttributes) {
+						j = 0;
+						for (String cell : nextRecord) {
+							if (map.containsKey(cell))
+								attributes.put(j, map.get(cell));
+							j++;
+						}
+						readAttributes = true;
+					} else {
 //	                        JSONObject tempObject = new JSONObject();
-	                    	Document tempObject = new Document();
-	                        j=0;
-	                        for (String cell : nextRecord) {
-	                            if(attributes.containsKey(j))
-	                                tempObject.append(attributes.get(j).toString(), cell);
-	                            j++;
-	                        }
-	                        records.add(tempObject);
-	                        batchSize++;
-	                        if(batchSize==Constants.BATCH_SIZE) {
-	                        	MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
-	             	 		  	mongoMigrator.insertData(metadata, records);
-	             	 		  	batchSize=0;
-	             	 		  	records = new ArrayList<>();
-	                        }
-	                        	
-	                    }
-	                }
-	            }
-	          
-	            if(batchSize>0) {
-	               MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
-	 	 		   mongoMigrator.insertData(metadata, records);
-	            }
-	      
+						Document tempObject = new Document();
+						j = 0;
+						for (String cell : nextRecord) {
+							if (attributes.containsKey(j))
+								tempObject.append(attributes.get(j).toString(), cell);
+							j++;
+						}
+						records.add(tempObject);
+						batchSize++;
+						if (batchSize == Constants.BATCH_SIZE) {
+							MongoDBMigrator mongoMigrator = new MongoDBMigrator();
+							mongoMigrator.insertData(metadata, records);
+							batchSize = 0;
+							records = new ArrayList<>();
+						}
 
+					}
+				}
+			}
 
-	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (CsvValidationException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
-		  
-		   return response;
-		
-		
-		
-		
+			if (batchSize > 0) {
+				MongoDBMigrator mongoMigrator = new MongoDBMigrator();
+				mongoMigrator.insertData(metadata, records);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (CsvValidationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return response;
+
 //		JSONObject result = null;
 //		int i;
 //		String[] nextRecord;
@@ -155,6 +152,7 @@ public class CSVConverter {
 				JSONObject entity = entities.getJSONObject(i);
 				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
 				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
+				
 				sql = Constants.SQL_INSERT + tableName;
 				sql += "(";
 				String columns = "";
@@ -178,9 +176,8 @@ public class CSVConverter {
 				values = values.substring(0, values.length() - 2);
 				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
 				System.out.println("sql: " + sql);
-
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber);
+				oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber, tableName);
 
 			}
 //			lineReader.close();
