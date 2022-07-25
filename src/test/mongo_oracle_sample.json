@@ -15,7 +15,7 @@
 				"Entities": [
 					{
 						"InputEntityName": "Employees",
-						"OutputEntityName": "Emp2",
+						"OutputEntityName": "Emp3",
 						"Mappings": [
 							{
 								"OutputAttributeName": "EmpId",

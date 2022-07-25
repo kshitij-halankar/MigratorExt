@@ -4,9 +4,9 @@
 			"InputSourceType": "CSV",
 			"InputSource": "src\\test\\sample_csv_v1.csv",
 			"OutputSourceType": "Oracle",
-			"OutputSource": "<hostname:port:SID>",
-			"OutputSourceLoginUsername": "<Username>",
-			"OutputSourceLoginPassword": "<Password>",
+			"OutputSource": "jdbc:oracle:thin:@localhost:1521:xe",
+			"OutputSourceLoginUsername": "SYSTEM",
+			"OutputSourceLoginPassword": "12345678",
 			"Schema": {
 				"InputSchema": "",
 				"OutputSchema": "EmployeeDetails",
