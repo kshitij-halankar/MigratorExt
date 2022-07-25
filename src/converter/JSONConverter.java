@@ -30,13 +30,15 @@ public class JSONConverter {
 
 	public JSONObject insertJSONToMongo(JSONObject metadata, JSONObject fileData) {
 		JSONObject result = null;
+		int batchSize = 0;
 		JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
 		JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
 			String collectionName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
-			JSONArray records = new JSONArray();
+//			JSONArray records = new JSONArray();
+			List<Document> records = new ArrayList<>();
 			JSONObject mappingAttributes = new JSONObject();
 			for (int k = 0; k < mappings.length(); k++) {
 				mappingAttributes.put(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME),
@@ -46,19 +48,30 @@ public class JSONConverter {
 //            System.out.println(fileData.toString());
 			JSONArray fileDataArray = fileData.getJSONArray(schema.getString(Constants.INPUT_SCHEMA));
 			for (int j = 0; j < fileDataArray.length(); j++) {
-				JSONObject data = new JSONObject();
-
+//				JSONObject data = new JSONObject();
+				Document tempObject = new Document();
 				JSONObject dataRow = fileDataArray.getJSONObject(j);
 				Iterator<String> dataRowKeys = mappingAttributes.keys();
 				while (dataRowKeys.hasNext()) {
 					String key = dataRowKeys.next();
-					data.put(mappingAttributes.getString(key), dataRow.getString(key));
+					tempObject.append(mappingAttributes.getString(key), dataRow.getString(key));
+//					data.put(mappingAttributes.getString(key), dataRow.getString(key));
+
 				}
-				records.put(data);
+				records.add(tempObject);
+				batchSize++;
+				if (batchSize == Constants.BATCH_SIZE) {
+					MongoDBMigrator mongoMigrator = new MongoDBMigrator();
+					mongoMigrator.insertData(metadata, records);
+					batchSize = 0;
+					records = new ArrayList<>();
+				}
 			}
-			System.out.println(records.toString());
-			MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-			mongoMigrator.insertData(metadata, records);
+//			System.out.println(records.toString());
+			if (batchSize > 0) {
+				MongoDBMigrator mongoMigrator = new MongoDBMigrator();
+				mongoMigrator.insertData(metadata, records);
+			}
 		}
 		return result;
 	}
