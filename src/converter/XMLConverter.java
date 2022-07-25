@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
+import org.bson.Document;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +20,8 @@ import utils.Constants;
 public class XMLConverter {
 
 	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
-
+		
+		int batchSize=0;
 		// System.out.println("metadata file: " + metadata);
 		JSONObject schema = metadata.getJSONObject("Schema");
 		JSONArray entities = schema.getJSONArray("Entities");
@@ -27,30 +29,45 @@ public class XMLConverter {
 		// System.out.println("entities: " + entities);
 		JSONObject xmlTojson = XML.toJSONObject(fileData.toString());
 		// System.out.println("json data " + xmlTojson);
-		JSONArray menu = new JSONArray();
+		List<Document> menu = new ArrayList<>();
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
 			JSONObject test = xmlTojson.getJSONObject(schema.getString(Constants.INPUT_SCHEMA));
 			JSONArray testJsonArray = test.getJSONArray(entity.getString(Constants.INPUT_ENTITY_NAME));
-			JSONObject food = new JSONObject();
+			Document food = new Document();
 			System.out.println("lengtgh: " + testJsonArray.length());
 			// System.out.println("test: "+testJsonArray);
 			for (int j = 0; j < testJsonArray.length(); j++) {
 				// System.out.println(testJsonArray.getJSONObject(j));
-				food = new JSONObject();
+				food = new Document();
 				for (int k = 0; k < mappings.length(); k++) {
 					if (testJsonArray.getJSONObject(j)
 							.has(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME))) {
-						food.put(mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME),
+						food.append(mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME),
 								testJsonArray.getJSONObject(j)
 										.get(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME)));
 					}
 				}
-				menu.put(food);
+				menu.add(food);
+				batchSize++;
+				 if(batchSize==Constants.BATCH_SIZE) {
+                 	MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
+      	 		  	mongoMigrator.insertData(metadata, menu);
+      	 		  	batchSize=0;
+      	 		  	menu = new ArrayList<>();
+                 }
 			}
+			
+			if(batchSize>0) {
+	               MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
+	 	 		   mongoMigrator.insertData(metadata, menu);
+	            }
+			
 		}
 		System.out.println("menu: " + menu);
+//		MongoDBMigrator migrator = new MongoDBMigrator();
+//		migrator.insertData(metadata, menu);
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
