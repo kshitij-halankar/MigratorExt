@@ -16,9 +16,9 @@ import java.util.Iterator;
 public class MongoDBMigrator {
 
 	public void insertData(JSONObject metadata, JSONArray arr) {
-		
-		MongoClient client = MongoClients.create("mongodb://localhost:27017");
-		System.out.println(metadata);
+		String dbURL=metadata.getString(Constants.OUTPUT_SOURCE);
+		MongoClient client = MongoClients.create(dbURL);
+//		System.out.println(metadata);
 		MongoDatabase database = client.getDatabase(metadata.getJSONObject(Constants.SCHEMA).getString(Constants.OUTPUT_SCHEMA));
         MongoCollection<Document> collection = database.getCollection(metadata.getJSONObject(Constants.SCHEMA).getJSONArray(Constants.ENTITIES).getJSONObject(0).getString(Constants.OUTPUT_ENTITY_NAME));
 

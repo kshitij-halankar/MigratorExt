@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import connector.OracleDBConnector;
+import migrator.MongoDBMigrator;
 import utils.Constants;
 
 public class ResultSetConverter {
@@ -30,7 +31,7 @@ public class ResultSetConverter {
 			for (int i = 0; i < entities.length(); i++) {
 				JSONObject entity = entities.getJSONObject(i);
 				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
-				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
+				String tableName = entity.getString(Constants.INPUT_ENTITY_NAME);
 				String fetchQuery = "";
 				fetchQuery = "Select ";
 				List<String> columns = new ArrayList<>();
@@ -39,7 +40,8 @@ public class ResultSetConverter {
 					fetchQuery += colName + ", ";
 					columns.add(colName);
 				}
-				fetchQuery = " FROM " + tableName;
+				fetchQuery = fetchQuery.substring(0, fetchQuery.length() - 2);
+				fetchQuery += " FROM " + tableName;
 				System.out.println(fetchQuery);
 				Statement statement = conn.createStatement();
 				ResultSet resultSet = statement.executeQuery(fetchQuery);
@@ -47,15 +49,20 @@ public class ResultSetConverter {
 				JSONArray fetchedData = new JSONArray();
 				while (resultSet.next()) {
 					JSONObject dataRowObj = new JSONObject();
-					for (int j = 0; j < columns.size(); j++) {
-						dataRowObj.put(columns.get(j), resultSet.getString(j));
+					for (int j = 1; j <= columns.size(); j++) {
+						dataRowObj.put(columns.get(j - 1), resultSet.getString(j));
 					}
 					fetchedData.put(dataRowObj);
 //					System.out.println(resultSet.getString(1) + " " + resultSet.getString(2) + " ");
 				}
+				System.out.println("asdasdasdas");
+				System.out.println(fetchedData);
 				// insert into mongo
 //				MongoDBConnector.getConnection();
 //				MongoDBMigrator.insertData();
+
+				MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
+				mongoDBMigrator.insertData(metadata, fetchedData);
 			}
 
 		} catch (Exception ex) {

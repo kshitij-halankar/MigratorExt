@@ -1,0 +1,42 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "Oracle",
+			"InputSource": "jdbc:oracle:thin:@localhost:1521:xe",
+			"InputSourceLoginUsername": "SYSTEM",
+			"InputSourceLoginPassword": "12345678",
+			"OutputSourceType": "Mongo",
+			"OutputSource": "mongodb://localhost:27017",
+			"OutputSourceLoginUsername": "<Username>",
+			"OutputSourceLoginPassword": "<Password>",
+			"Schema": {
+				"InputSchema": "SYSTEM",
+				"OutputSchema": "EmployeeTest",
+				"Entities": [
+					{
+						"InputEntityName": "Emp",
+						"OutputEntityName": "Employees",
+						"Mappings": [
+							{
+								"OutputAttributeName": "EmpId",
+								"InputAttributeName": "EmpId"
+							},
+							{
+								"OutputAttributeName": "EmpName",
+								"InputAttributeName": "EmployeeName"
+							},
+							{
+								"OutputAttributeName": "Salary",
+								"InputAttributeName": "EmployeeSalary"
+							},
+							{
+								"OutputAttributeName": "City",
+								"InputAttributeName": "EmployeeCity"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}
