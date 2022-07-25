@@ -2,40 +2,30 @@
 	"MigratorExt": [
 		{
 			"InputSourceType": "XML",
-			"InputSource": "<Directory Path>",
+			"InputSource": "src/test/XmlTestData.xml",
 			"OutputSourceType": "Mongo",
 			"OutputSource": "<hostname:port:SID>",
 			"OutputSourceLoginUsername": "<Username>",
 			"OutputSourceLoginPassword": "<Password>",
 			"Schema": {
-				"InputSchema": "<SchemaName>",
-				"OutputSchema": "<SchemaName>",
+				"InputSchema": "breakfast_menu",
+				"OutputSchema": "XMLToJsonTestDatabase",
 				"Entities": [
 					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName1>",
+						"InputEntityName": "food",
+						"OutputEntityName": "XMLToJsonTestCollection",
 						"Mappings": [
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "price",
+								"OutputAttributeName": "Rates"
 							},
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							}
-						]
-					},
-					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName2>",
-						"Mappings": [
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "name",
+								"OutputAttributeName": "Alias"
 							},
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "calories",
+								"OutputAttributeName": "cal"
 							}
 						]
 					}

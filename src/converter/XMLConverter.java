@@ -20,33 +20,36 @@ public class XMLConverter {
 
 	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
 
-		String input = "D:\\temp\\src\\temp\\xml_mongo.json";
-		System.out.println("metadata file: " + metadata);
-
-		JSONObject schema = metadata.getJSONArray("MigratorExt").getJSONObject(0).getJSONObject("Schema");
+		//System.out.println("metadata file: " + metadata);
+		JSONObject schema = metadata.getJSONObject("Schema");
 		JSONArray entities = schema.getJSONArray("Entities");
-
-		System.out.println("schema: " + schema);
-		System.out.println("entities: " + entities);
-
+		//System.out.println("schema: " + schema);
+		//System.out.println("entities: " + entities);
 		JSONObject xmlTojson = XML.toJSONObject(fileData.toString());
-		System.out.println("json data" + xmlTojson);
-
+		//System.out.println("json data  " + xmlTojson);
 		JSONArray menu = new JSONArray();
 		for (int i = 0; i < entities.length(); i++) {
 			JSONObject entity = entities.getJSONObject(i);
 			JSONArray mappings = entity.getJSONArray("Mappings");
-			JSONArray test = xmlTojson.getJSONArray(metadata.getString(Constants.INPUT_ENTITY_NAME));
+			JSONObject test = xmlTojson.getJSONObject(schema.getString(Constants.INPUT_SCHEMA));
+			JSONArray testJsonArray = test.getJSONArray(entity.getString(Constants.INPUT_ENTITY_NAME));
 			JSONObject food = new JSONObject();
-			for (int j = 0; j < mappings.length(); j++) {
-
-				if (test.getJSONObject(j).has(mappings.getJSONObject(j).getString("InputAttributeName"))) {
-					food.put(mappings.getJSONObject(j).getString("OutputAttributeName"),
-							test.getJSONObject(j).get(mappings.getJSONObject(j).getString("InputAttributeName")));
+			System.out.println("lengtgh: "+testJsonArray.length());
+			//System.out.println("test: "+testJsonArray);
+			for (int j = 0; j < testJsonArray.length(); j++) {
+				//System.out.println(testJsonArray.getJSONObject(j));
+				food = new JSONObject();
+				for(int k = 0;  k < mappings.length(); k++) 
+				{
+					if(testJsonArray.getJSONObject(j).has(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME)))
+					{
+						food.put(mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME), testJsonArray.getJSONObject(j).get(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME)));
+					}
 				}
 				menu.put(food);
 			}
 		}
+		System.out.println("menu: "+menu);
 		JSONObject convertedData = new JSONObject();
 		convertedData.put("DataArray", menu);
 		MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
