@@ -14,24 +14,24 @@
 				"OutputSchema": "EmployeeTest",
 				"Entities": [
 					{
-						"InputEntityName": "Emp",
-						"OutputEntityName": "Employees",
+						"InputEntityName": "Emp3",
+						"OutputEntityName": "Employees2",
 						"Mappings": [
 							{
-								"OutputAttributeName": "EmpId",
-								"InputAttributeName": "EmpId"
+								"InputAttributeName": "EmpId",
+								"OutputAttributeName": "EmpId"
 							},
 							{
-								"OutputAttributeName": "EmpName",
-								"InputAttributeName": "EmployeeName"
+								"InputAttributeName": "EmpName",
+								"OutputAttributeName": "EmployeeName"
 							},
 							{
-								"OutputAttributeName": "Salary",
-								"InputAttributeName": "EmployeeSalary"
+								"InputAttributeName": "Salary",
+								"OutputAttributeName": "EmployeeSalary"
 							},
 							{
-								"OutputAttributeName": "City",
-								"InputAttributeName": "EmployeeCity"
+								"InputAttributeName": "City",
+								"OutputAttributeName": "EmployeeCity"
 							}
 						]
 					}

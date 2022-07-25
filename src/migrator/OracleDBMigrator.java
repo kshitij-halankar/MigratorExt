@@ -112,7 +112,7 @@ public class OracleDBMigrator {
 //                        System.out.println("mapping: " + mappingAttributes.get(j - 1) + " - "+ mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME));
 							String attributeName = mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME);
 							String dataType = dataTypes.getString(attributeName.toUpperCase());
-							if (dataType == "NUMBER") {
+							if (dataType.equalsIgnoreCase("NUMBER")) {
 								p.setInt(j, dataRow
 										.getInt(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME)));
 							} else {
@@ -181,6 +181,20 @@ public class OracleDBMigrator {
 		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
 		String dbUserName = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_USERNAME).toString();
 		String dbPassword = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_PASSWORD).toString();
+		OracleDBConnector oracleDBConnector = new OracleDBConnector();
+		Connection con = oracleDBConnector.getConnection(dbURL, dbUserName, dbPassword);
+		Statement stmt = con.createStatement();
+		System.out.println(entityName);
+		ResultSet rs = stmt.executeQuery("select * from " + entityName + " where ROWNUM <= 1");
+		tableMetaData = rs.getMetaData();
+		return tableMetaData;
+	}
+
+	public ResultSetMetaData getTableMetadataFromInput(JSONObject metadata, String entityName) throws SQLException {
+		ResultSetMetaData tableMetaData = null;
+		String dbURL = metadata.get(Constants.INPUT_SOURCE).toString();
+		String dbUserName = metadata.get(Constants.INPUT_SOURCE_LOGIN_USERNAME).toString();
+		String dbPassword = metadata.get(Constants.INPUT_SOURCE_LOGIN_PASSWORD).toString();
 		OracleDBConnector oracleDBConnector = new OracleDBConnector();
 		Connection con = oracleDBConnector.getConnection(dbURL, dbUserName, dbPassword);
 		Statement stmt = con.createStatement();
