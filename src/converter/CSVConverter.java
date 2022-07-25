@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.opencsv.CSVReader;
@@ -22,57 +23,73 @@ public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata) {
 		JSONObject response = null;
-		try {
-			System.out.println(metadata);
-			int i, j;
-			HashMap map = new HashMap<>(), attributes = new HashMap();
-			String[] nextRecord;
-			boolean readAttributes = false;
-			JSONArray records = new JSONArray();
-			JSONObject rootObject = metadata;
-			JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
-			for (i = 0; i < metaRecords.length(); i++) {
-				JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
-				for (j = 0; j < mappings.length(); j++)
-					map.put(mappings.getJSONObject(j).getString("InputAttributeName"),
-							mappings.getJSONObject(j).getString("OutputAttributeName"));
+		   try {
+			   System.out.println(metadata);
+	            int i, j, batchSize=0;
+	            HashMap map = new HashMap<>(), attributes = new HashMap();
+	            String[] nextRecord;
+	            boolean readAttributes = false;
+	            List<Document> records = new ArrayList<>();
+	            JSONObject rootObject = metadata;
+	            JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
+	            for (i = 0; i < metaRecords.length(); i++) {
+	                JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
+	                for ( j = 0; j < mappings.length(); j++)
+	                    map.put(mappings.getJSONObject(j).getString("InputAttributeName"),mappings.getJSONObject(j).getString("OutputAttributeName"));
 
-				FileReader filereader = new FileReader(rootObject.getString("InputSource"));
-				CSVReader csvReader = new CSVReader(filereader);
-				while ((nextRecord = csvReader.readNext()) != null) {
-					if (!readAttributes) {
-						j = 0;
-						for (String cell : nextRecord) {
-							if (map.containsKey(cell))
-								attributes.put(j, map.get(cell));
-							j++;
-						}
-						readAttributes = true;
-					} else {
-						JSONObject tempObject = new JSONObject();
-						j = 0;
-						for (String cell : nextRecord) {
-							if (attributes.containsKey(j))
-								tempObject.put(attributes.get(j).toString(), cell);
-							j++;
-						}
-						records.put(tempObject);
-					}
-				}
-			}
-			MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-			mongoMigrator.insertData(metadata, records);
+	                FileReader filereader = new FileReader(rootObject.getString("InputSource"));
+	                CSVReader csvReader = new CSVReader(filereader);
+	                while ((nextRecord = csvReader.readNext()) != null) {
+	                    if (!readAttributes) {
+	                        j=0;
+	                        for (String cell : nextRecord){
+	                            if(map.containsKey(cell))
+	                                attributes.put(j,map.get(cell));
+	                            j++;
+	                        }
+	                        readAttributes = true;
+	                    } else {
+//	                        JSONObject tempObject = new JSONObject();
+	                    	Document tempObject = new Document();
+	                        j=0;
+	                        for (String cell : nextRecord) {
+	                            if(attributes.containsKey(j))
+	                                tempObject.append(attributes.get(j).toString(), cell);
+	                            j++;
+	                        }
+	                        records.add(tempObject);
+	                        batchSize++;
+	                        if(batchSize==Constants.BATCH_SIZE) {
+	                        	MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
+	             	 		  	mongoMigrator.insertData(metadata, records);
+	             	 		  	batchSize=0;
+	             	 		  	records = new ArrayList<>();
+	                        }
+	                        	
+	                    }
+	                }
+	            }
+	          
+	            if(batchSize>0) {
+	               MongoDBMigrator mongoMigrator =  new MongoDBMigrator();
+	 	 		   mongoMigrator.insertData(metadata, records);
+	            }
+	      
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (CsvValidationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		return response;
-
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        } catch (CsvValidationException e) {
+	            e.printStackTrace();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		  
+		   return response;
+		
+		
+		
+		
 //		JSONObject result = null;
 //		int i;
 //		String[] nextRecord;
