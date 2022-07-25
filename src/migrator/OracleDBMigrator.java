@@ -91,7 +91,7 @@ public class OracleDBMigrator {
 							.equals(mappings.getJSONObject(k).getString(Constants.OUTPUT_ATTRIBUTE_NAME))) {
 //                        System.out.println("mapping: " + mappingAttributes.get(j - 1) + " - "+ mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME));
 						p.setString(j,
-								dataRow.getString(mappings.getJSONObject(k).get(Constants.INPUT_ATTRIBUTE_NAME).toString()));
+								dataRow.get(mappings.getJSONObject(k).get(Constants.INPUT_ATTRIBUTE_NAME).toString()).toString());
 //                        System.out.println("dataRow: " + dataRow.getString(mappings.getJSONObject(k).getString(Constants.INPUT_ATTRIBUTE_NAME)));
 						break;
 					}
