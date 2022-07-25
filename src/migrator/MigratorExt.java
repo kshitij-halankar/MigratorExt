@@ -24,7 +24,8 @@ public class MigratorExt {
 //        String input = "src\\test\\csv_oracle_sample1.json";
 //        String input = "src\\test\\json_oracle_sample.json";
 //    	String input="src\\test\\xml_oracle_sample.json";
-		String input = "src\\test\\oracle_mongo_sample.json";
+//		String input = "src\\test\\oracle_mongo_sample.json";
+		String input="src\\test\\mongo_oracle_sample.json";
 		try {
 //            MetadataParser metadataParser = new MetadataParser();
 //            JSONObject metadata = metadataParser.parseMetadata(input);

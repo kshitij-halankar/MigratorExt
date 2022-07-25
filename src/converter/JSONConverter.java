@@ -6,14 +6,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bson.BsonDocument;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.conversions.Bson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Projections;
 
 import connector.OracleDBConnector;
 import metadata.MetadataParser;
@@ -70,17 +75,47 @@ public class JSONConverter {
 			for (int i = 0; i < entities.length(); i++) {
 				JSONObject entity = entities.getJSONObject(i);
 				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
-				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
 
 				MongoClient client = MongoClients.create(dbURL);
-				MongoDatabase database = client.getDatabase(schema.getString(Constants.OUTPUT_SCHEMA));
+				MongoDatabase database = client.getDatabase(schema.getString(Constants.INPUT_SCHEMA));
 		        MongoCollection<Document> collection = database.getCollection(entity.getString(Constants.INPUT_ENTITY_NAME));
+		        List<String> includeFields=new ArrayList<>();
+		        List<String> mappingAttributes = new ArrayList<>();
+				int columnCount = 0;
+				String columns = "";
+		        for(int j=0; j<mappings.length();j++) {
+		        	includeFields.add(mappings.getJSONObject(j).getString(Constants.INPUT_ATTRIBUTE_NAME));
+		        	mappingAttributes.add(mappings.getJSONObject(j).getString(Constants.OUTPUT_ATTRIBUTE_NAME));
+		        	columns += mappings.getJSONObject(j).getString(Constants.OUTPUT_ATTRIBUTE_NAME) + ", ";
+					columnCount++;
+		        }
+		        Bson projection = Projections.fields(Projections.include(includeFields), Projections.excludeId());
+		        System.out.println("projection: "+projection);
+		        
+	            FindIterable<Document> iterable = collection.find().projection(projection);
+	            Iterator iterator = iterable.iterator();
+	            JSONArray dataRows = new JSONArray();
+	            while (iterator.hasNext()) {
+	            	JSONObject dataRow=new JSONObject(((Document) iterator.next()).toJson());
+	            	dataRows.put(dataRow);
+	                System.out.println(dataRow);
+	            	
+	              }
 
-				String fetchSql="";
-				OracleDBConnector oracleDBConnector = new OracleDBConnector();
-				Connection conn = oracleDBConnector.getConnection(dbURL, dbUserName, dbPassword);
-				PreparedStatement p = conn.prepareStatement(fetchSql);
-				
+				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
+	            String sql = Constants.SQL_INSERT + tableName;
+				sql += "(";
+				columns = columns.substring(0, columns.length() - 2);
+				String values = "";
+				for (int j = 0; j < columnCount; j++) {
+					values += "?, ";
+				}
+				values = values.substring(0, values.length() - 2);
+				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
+				System.out.println("sql: " + sql);
+				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
+				oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
+						entity.getString(Constants.INPUT_ENTITY_NAME));
 			}
 		} catch (Exception ex) {
 			response = new JSONObject();
