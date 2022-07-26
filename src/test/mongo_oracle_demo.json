@@ -1,0 +1,56 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "Mongo",
+			"InputSource": "mongodb://localhost:27017",
+			"InputSourceLoginUsername": "sysuser",
+			"InputSourceLoginPassword": "12345678",
+			"OutputSourceType": "Oracle",
+			"OutputSource": "jdbc:oracle:thin:@localhost:1521:xe",
+			"OutputSourceLoginUsername": "SYSTEM",
+			"OutputSourceLoginPassword": "12345678",
+			"Schema": {
+				"InputSchema": "TestXMLVolumeDatabase",
+				"OutputSchema": "system",
+				"Entities": [
+					{
+						"InputEntityName": "TestXMLVolumeCollection",
+						"OutputEntityName": "testVolumeEntity",
+						"Mappings": [
+							{
+								"InputAttributeName": "DT",
+								"OutputAttributeName": "DateColumn"
+							},
+							{
+								"InputAttributeName": "OPN",
+								"OutputAttributeName": "OpenColumn"
+							},
+							{
+								"InputAttributeName": "ID",
+								"OutputAttributeName": "IndexColumn"
+							},
+							{
+								"InputAttributeName": "High",
+								"OutputAttributeName": "HighColumn"
+							},{
+								"InputAttributeName": "Low",
+								"OutputAttributeName": "LowColumn"
+							},
+							{
+								"InputAttributeName": "Close",
+								"OutputAttributeName": "CloseColumn"
+							},{
+								"InputAttributeName": "AdjClose",
+								"OutputAttributeName": "AdjCloseColumn"
+							},
+							{
+								"InputAttributeName": "Volume",
+								"OutputAttributeName": "VolumeColumn"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

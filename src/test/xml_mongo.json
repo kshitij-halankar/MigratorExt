@@ -2,30 +2,48 @@
 	"MigratorExt": [
 		{
 			"InputSourceType": "XML",
-			"InputSource": "src/test/XmlTestData.xml",
+			"InputSource": "src/test/mongo_test_data.xml",
 			"OutputSourceType": "Mongo",
-			"OutputSource": "<hostname:port:SID>",
-			"OutputSourceLoginUsername": "<Username>",
-			"OutputSourceLoginPassword": "<Password>",
+			"OutputSource": "mongodb://localhost:27017",
+			"OutputSourceLoginUsername": "sysuser",
+			"OutputSourceLoginPassword": "12345678",
 			"Schema": {
-				"InputSchema": "breakfast_menu",
-				"OutputSchema": "XMLToJsonTestDatabase",
+				"InputSchema": "root",
+				"OutputSchema": "TestXMLVolumeDatabase",
 				"Entities": [
 					{
-						"InputEntityName": "food",
-						"OutputEntityName": "XMLToJsonTestCollection",
+						"InputEntityName": "row",
+						"OutputEntityName": "TestXMLVolumeCollection",
 						"Mappings": [
 							{
-								"InputAttributeName": "price",
-								"OutputAttributeName": "Rates"
+								"InputAttributeName": "Date",
+								"OutputAttributeName": "DT"
 							},
 							{
-								"InputAttributeName": "name",
-								"OutputAttributeName": "Alias"
+								"InputAttributeName": "Open",
+								"OutputAttributeName": "OPN"
 							},
 							{
-								"InputAttributeName": "calories",
-								"OutputAttributeName": "cal"
+								"InputAttributeName": "Index",
+								"OutputAttributeName": "ID"
+							},
+							{
+								"InputAttributeName": "High",
+								"OutputAttributeName": "High"
+							},{
+								"InputAttributeName": "Low",
+								"OutputAttributeName": "Low"
+							},
+							{
+								"InputAttributeName": "Close",
+								"OutputAttributeName": "Close"
+							},{
+								"InputAttributeName": "AdjClose",
+								"OutputAttributeName": "AdjClose"
+							},
+							{
+								"InputAttributeName": "Volume",
+								"OutputAttributeName": "Volume"
 							}
 						]
 					}

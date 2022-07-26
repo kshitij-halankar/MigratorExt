@@ -1,0 +1,77 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "XML",
+			"InputSource": "src/test/mongo_test_data.xml",
+			"OutputSourceType": "Mongo",
+			"OutputSource": "mongodb://localhost:27017",
+			"OutputSourceLoginUsername": "sysuser",
+			"OutputSourceLoginPassword": "12345678",
+			"Schema": {
+				"InputSchema": "root",
+				"OutputSchema": "CollectiveVolumeDatabase",
+				"Entities": [
+					{
+						"InputEntityName": "row",
+						"OutputEntityName": "CollectiveVolumeCollection",
+						"Mappings": [
+							{
+								"InputAttributeName": "Date",
+								"OutputAttributeName": "DT"
+							},
+							{
+								"InputAttributeName": "Open",
+								"OutputAttributeName": "OPN"
+							},
+                            {
+								"InputAttributeName": "Close",
+								"OutputAttributeName": "CLS"
+							},
+                            {
+								"InputAttributeName": "Volume",
+								"OutputAttributeName": "VOL"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"InputSourceType": "CSV",
+			"InputSource": "src/test/CSVTestData10000.csv",
+			"OutputSourceType": "Mongo",
+			"OutputSource": "mongodb://localhost:27017",
+			"OutputSourceLoginUsername": "sysuser",
+			"OutputSourceLoginPassword": "12345678",
+			"Schema": {
+			  "InputSchema": "<SchemaName>",
+			  "OutputSchema": "CollectiveVolumeDatabase",
+			  "Entities": [
+				{
+				  "InputEntityName": "<EntityName>",
+				  "OutputEntityName": "CollectiveVolumeCollection",
+				  "Mappings": [
+					{
+					  "InputAttributeName": "index",
+					  "OutputAttributeName": "ID"
+					},
+					{
+					  "InputAttributeName": "product",
+					  "OutputAttributeName": "Prod"
+					},
+					{
+					  "InputAttributeName": "brand",
+					  "OutputAttributeName": "Brand"
+					},
+					{
+					  "InputAttributeName": "sale_price",
+					  "OutputAttributeName": "Cost"
+					}
+				  ]
+				}
+			  ]
+			}
+		  }
+		
+	]
+}
