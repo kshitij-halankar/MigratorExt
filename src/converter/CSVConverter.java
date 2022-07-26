@@ -1,20 +1,15 @@
 package converter;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import connector.OracleDBConnector;
 import migrator.MongoDBMigrator;
 import migrator.OracleDBMigrator;
 import utils.Constants;
@@ -32,14 +27,14 @@ public class CSVConverter {
 			boolean readAttributes = false;
 			List<Document> records = new ArrayList<>();
 			JSONObject rootObject = metadata;
-			JSONArray metaRecords = rootObject.getJSONObject("Schema").getJSONArray("Entities");
+			JSONArray metaRecords = rootObject.getJSONObject(Constants.SCHEMA).getJSONArray(Constants.ENTITIES);
 			for (i = 0; i < metaRecords.length(); i++) {
-				JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray("Mappings");
+				JSONArray mappings = metaRecords.getJSONObject(i).getJSONArray(Constants.MAPPINGS);
 				for (j = 0; j < mappings.length(); j++)
-					map.put(mappings.getJSONObject(j).getString("InputAttributeName"),
-							mappings.getJSONObject(j).getString("OutputAttributeName"));
+					map.put(mappings.getJSONObject(j).getString(Constants.INPUT_ATTRIBUTE_NAME),
+							mappings.getJSONObject(j).getString(Constants.OUTPUT_ATTRIBUTE_NAME));
 
-				FileReader filereader = new FileReader(rootObject.getString("InputSource"));
+				FileReader filereader = new FileReader(rootObject.getString(Constants.INPUT_SOURCE));
 				CSVReader csvReader = new CSVReader(filereader);
 				while ((nextRecord = csvReader.readNext()) != null) {
 					if (!readAttributes) {
@@ -51,7 +46,6 @@ public class CSVConverter {
 						}
 						readAttributes = true;
 					} else {
-//	                        JSONObject tempObject = new JSONObject();
 						Document tempObject = new Document();
 						j = 0;
 						for (String cell : nextRecord) {
@@ -67,7 +61,6 @@ public class CSVConverter {
 							batchSize = 0;
 							records = new ArrayList<>();
 						}
-
 					}
 				}
 			}
@@ -86,80 +79,29 @@ public class CSVConverter {
 		}
 
 		return response;
-
-//		JSONObject result = null;
-//		int i;
-//		String[] nextRecord;
-//		boolean readAttributes = false;
-//		JSONArray records = new JSONArray();
-//		ArrayList attributes = new ArrayList();
-//
-//
-//		try {
-//			FileReader filereader = new FileReader(fileData.toString());
-//			CSVReader csvReader = new CSVReader(filereader);
-//			while ((nextRecord = csvReader.readNext()) != null) {
-//				if (!readAttributes) {
-//					for (String cell : nextRecord)
-//						attributes.add(cell);
-//					readAttributes = true;
-//				} else {
-//					JSONObject tempObject = new JSONObject();
-//					i = 0;
-//					for (String cell : nextRecord) {
-//						tempObject.put(attributes.get(i).toString(), cell);
-//						i++;
-//					}
-//					records.put(tempObject);
-//				}
-//
-//			}
-//			result.put("convertedValue", records);
-//
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (CsvValidationException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return result;
 	}
 
 	public JSONObject convertCSVToSQLAndInsert(JSONObject metadata) {
 		JSONObject response = null;
 		String sql = null;
 		try {
-//			System.out.println(metadata);
 			String inputFile = metadata.get(Constants.INPUT_SOURCE).toString();
-//			System.out.println("inputFile: " + inputFile);
-//			BufferedReader lineReader = new BufferedReader(new FileReader(inputFile));
 			CSVReader csvReader = new CSVReader(new FileReader(inputFile));
 			String lineText = null;
 			int count = 0;
-//			lineText = lineReader.readLine();
-//			System.out.println(lineText);
 			String headers[] = csvReader.readNext();
-//			System.out.println(headers.length);
-//			for(int k=0;k<headers.length;k++) {
-//				System.out.println(headers[k]);
-//			}
-
 			JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
 			JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
 			for (int i = 0; i < entities.length(); i++) {
 				JSONObject entity = entities.getJSONObject(i);
 				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
 				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
-				
 				sql = Constants.SQL_INSERT + tableName;
 				sql += "(";
 				String columns = "";
 				int columnCount = 0;
 				List<Integer> columnNumber = new ArrayList<>();
 				for (String attribute : headers) {
-//					System.out.println(attribute);
 					for (int j = 0; j < mappings.length(); j++) {
 						if (mappings.getJSONObject(j).getString(Constants.INPUT_ATTRIBUTE_NAME).equals(attribute)) {
 							columns += mappings.getJSONObject(j).getString(Constants.OUTPUT_ATTRIBUTE_NAME) + ", ";
@@ -180,7 +122,6 @@ public class CSVConverter {
 				oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber, tableName);
 
 			}
-//			lineReader.close();
 			csvReader.close();
 
 		} catch (Exception ex) {

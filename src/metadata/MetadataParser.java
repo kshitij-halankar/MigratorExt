@@ -8,11 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import utils.Constants;
 
 public class MetadataParser {
@@ -42,16 +40,14 @@ public class MetadataParser {
 	public JSONObject parseMetadata(JSONObject metadata) throws JSONException {
 		if (validateMetadata(metadata)) {
 			return metadata;
-		}else {
+		} else {
 			throw new JSONException("Error in Input Metadata.");
 		}
 	}
 
 	public boolean validateMetadata(JSONObject migratorExt) {
 		try {
-//			System.out.println(migratorExt);
 			JSONObject metadata = migratorExt.getJSONArray(Constants.MIGRATOR_EXT).getJSONObject(0);
-//			System.out.println("metadata:\n"+metadata);
 			if (!(metadata.has(Constants.INPUT_SOURCE_TYPE) && metadata.has(Constants.INPUT_SOURCE)
 					&& metadata.has(Constants.OUTPUT_SOURCE_TYPE) && metadata.has(Constants.OUTPUT_SOURCE))) {
 				return false;
