@@ -42,18 +42,11 @@ public class Constants {
 	public static final String SQL_INSERT = "INSERT INTO ";
 	public static final String SQL_VALUES = " VALUES ";
 	public static final int BATCH_SIZE = 1000;
-
-//	public static final String DB_PASSWORD = "dbPassword";
-//	public static final String OUTPUT_SOURCE = "outputSource";
-//	public static final String OUTPUT_TYPE = "outputType";
-//	public static final String COLLECTION_NAME = "collectionName";
-//	public static final String TABLE_NAME = "tableName";
-//	public static final String COLUMN_NAME = "columnName";
-//	public static final String INPUT_CONNECTION_STRING = "inputConnectionString";
-//	public static final String OUTPUT_CONNECTION_STRING = "outputConnectionString";
-//	public static final String DB_USER_NAME = "dbUserName";
-//	public static final String DB_PASSWORD = "dbPassword";
-//	public static final String INCLUDED_COLUMNS = "includedColumns";
-
-//	public static final String 
+	
+	//response
+	public static final String RESPONSE_SUCCESS="Success";
+	public static final String RESPONSE_FAILURE="Failure";
+	public static final String RESPONSE_STATUS="ResponseStatus";
+	public static final String RESPONSE_TOTAL_RECORDS_INSERTED="RecordsInserted";
+	public static final String RESPONSE_CAUSE="Cause";
 }

@@ -1,15 +1,12 @@
 package converter;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import migrator.MongoDBMigrator;
 import migrator.OracleDBMigrator;
 import utils.Constants;
@@ -18,7 +15,8 @@ import java.util.HashMap;
 public class CSVConverter {
 
 	public JSONObject convertCSVToJSON(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		try {
 			System.out.println(metadata);
 			int i, j, batchSize = 0;
@@ -57,7 +55,7 @@ public class CSVConverter {
 						batchSize++;
 						if (batchSize == Constants.BATCH_SIZE) {
 							MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-							mongoMigrator.insertData(metadata, records);
+							insertedRecordsCount += mongoMigrator.insertData(metadata, records);
 							batchSize = 0;
 							records = new ArrayList<>();
 						}
@@ -67,22 +65,19 @@ public class CSVConverter {
 
 			if (batchSize > 0) {
 				MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-				mongoMigrator.insertData(metadata, records);
+				insertedRecordsCount += mongoMigrator.insertData(metadata, records);
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (CsvValidationException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+			insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
+		} catch (Exception ex) {
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-
-		return response;
+		return insertResponse;
 	}
 
 	public JSONObject convertCSVToSQLAndInsert(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
 		String sql = null;
 		try {
 			String inputFile = metadata.get(Constants.INPUT_SOURCE).toString();
@@ -119,16 +114,15 @@ public class CSVConverter {
 				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
 				System.out.println("sql: " + sql);
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber, tableName);
-
+				insertResponse = oracleDBMigrator.insertCSVData(metadata, entity, csvReader, sql, columnNumber,
+						tableName);
 			}
 			csvReader.close();
 
 		} catch (Exception ex) {
-			response = new JSONObject();
-			response.put(Constants.MIGRATION_STATUS, "failed");
-			response.put(Constants.FAILURE_CAUSE, ex.toString());
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-		return response;
+		return insertResponse;
 	}
 }

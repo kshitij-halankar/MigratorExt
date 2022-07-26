@@ -17,8 +17,10 @@ import utils.Constants;
 
 public class OracleDBMigrator {
 
-	public int[] insertCSVData(JSONObject metadata, JSONObject entity, CSVReader csvReader, String sql,
+	public JSONObject insertCSVData(JSONObject metadata, JSONObject entity, CSVReader csvReader, String sql,
 			List<Integer> columnNumber, String tableName) throws SQLException, CsvValidationException, IOException {
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		String[] row = null;
 		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
 		String dbUserName = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_USERNAME).toString();
@@ -32,7 +34,6 @@ public class OracleDBMigrator {
 		}
 		PreparedStatement p = conn.prepareStatement(sql);
 		int batchSize = 0;
-		int[] insertResult = null;
 		while ((row = csvReader.readNext()) != null) {
 			for (int j = 1; j <= columnNumber.size(); j++) {
 				p.setString(j, row[columnNumber.get(j - 1)]);
@@ -41,19 +42,24 @@ public class OracleDBMigrator {
 			p.clearParameters();
 			batchSize++;
 			if (batchSize == Constants.BATCH_SIZE) {
-				insertResult = p.executeBatch();
+				int[] insertResult = p.executeBatch();
+				insertedRecordsCount += insertResult.length;
 				batchSize = 0;
 			}
 		}
 		if (batchSize > 0) {
-			insertResult = p.executeBatch();
+			int[] insertResult = p.executeBatch();
+			insertedRecordsCount += insertResult.length;
 		}
-		return insertResult;
+		insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+		insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
+		return insertResponse;
 	}
 
-	public int[] insertJSONData(JSONObject metadata, JSONArray dataArray, List<String> mappingAttributes, String sql,
-			String entity) throws SQLException {
-		int[] insertResult = null;
+	public JSONObject insertJSONData(JSONObject metadata, JSONArray dataArray, List<String> mappingAttributes,
+			String sql, String entity) throws SQLException {
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
 		String dbUserName = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_USERNAME).toString();
 		String dbPassword = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_PASSWORD).toString();
@@ -96,19 +102,23 @@ public class OracleDBMigrator {
 				p.clearParameters();
 				batchSize++;
 				if (batchSize == Constants.BATCH_SIZE) {
-					insertResult = p.executeBatch();
+					int[] insertResult = p.executeBatch();
+					insertedRecordsCount += insertResult.length;
 					batchSize = 0;
 				}
 			}
 			if (batchSize > 0) {
-				insertResult = p.executeBatch();
+				int[] insertResult = p.executeBatch();
+				insertedRecordsCount += insertResult.length;
 			}
 		}
-		return insertResult;
+		insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+		insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
+		return insertResponse;
 	}
 
-	public int[] insertXMLData(JSONObject metadata, String sql, String entity) throws SQLException {
-		int[] insertResult = null;
+	public JSONObject insertXMLData(JSONObject metadata, String sql, String entity) throws SQLException {
+		JSONObject insertResponse = new JSONObject();
 		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
 		String dbUserName = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_USERNAME).toString();
 		String dbPassword = metadata.get(Constants.OUTPUT_SOURCE_LOGIN_PASSWORD).toString();
@@ -122,7 +132,7 @@ public class OracleDBMigrator {
 				mappings = entities.getJSONObject(i).getJSONArray(Constants.MAPPINGS);
 			}
 		}
-		return insertResult;
+		return null;
 	}
 
 	public ResultSetMetaData getTableMetadata(JSONObject metadata, String entityName) throws SQLException {

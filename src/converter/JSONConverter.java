@@ -21,7 +21,8 @@ import utils.Constants;
 public class JSONConverter {
 
 	public JSONObject insertJSONToMongo(JSONObject metadata, JSONObject fileData) {
-		JSONObject result = null;
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		int batchSize = 0;
 		JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
 		JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
@@ -49,21 +50,23 @@ public class JSONConverter {
 				batchSize++;
 				if (batchSize == Constants.BATCH_SIZE) {
 					MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-					mongoMigrator.insertData(metadata, records);
+					insertedRecordsCount += mongoMigrator.insertData(metadata, records);
 					batchSize = 0;
 					records = new ArrayList<>();
 				}
 			}
 			if (batchSize > 0) {
 				MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-				mongoMigrator.insertData(metadata, records);
+				insertedRecordsCount += mongoMigrator.insertData(metadata, records);
 			}
 		}
-		return result;
+		insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+		insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
+		return insertResponse;
 	}
 
 	public JSONObject fetchJSONFromMongoAndInsertToSQL(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
 		try {
 			String dbURL = metadata.get(Constants.INPUT_SOURCE).toString();
 			String dbUserName = metadata.get(Constants.INPUT_SOURCE_LOGIN_USERNAME).toString();
@@ -73,7 +76,6 @@ public class JSONConverter {
 			for (int i = 0; i < entities.length(); i++) {
 				JSONObject entity = entities.getJSONObject(i);
 				JSONArray mappings = entity.getJSONArray(Constants.MAPPINGS);
-
 				MongoClient client = MongoClients.create(dbURL);
 				MongoDatabase database = client.getDatabase(schema.getString(Constants.INPUT_SCHEMA));
 				MongoCollection<Document> collection = database
@@ -98,7 +100,6 @@ public class JSONConverter {
 					dataRows.put(dataRow);
 
 				}
-
 				String tableName = entity.getString(Constants.OUTPUT_ENTITY_NAME);
 				String sql = Constants.SQL_INSERT + tableName;
 				sql += "(";
@@ -110,19 +111,18 @@ public class JSONConverter {
 				values = values.substring(0, values.length() - 2);
 				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
+				insertResponse = oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
 						entity.getString(Constants.INPUT_ENTITY_NAME));
 			}
 		} catch (Exception ex) {
-			response = new JSONObject();
-			response.put(Constants.MIGRATION_STATUS, "failed");
-			response.put(Constants.FAILURE_CAUSE, ex.toString());
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-		return response;
+		return insertResponse;
 	}
 
 	public JSONObject convertJSONToSQLAndInsert(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
 		String sql = null;
 		try {
 			String inputFile = metadata.get(Constants.INPUT_SOURCE).toString();
@@ -156,14 +156,13 @@ public class JSONConverter {
 				values = values.substring(0, values.length() - 2);
 				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
+				insertResponse = oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
 						entity.getString(Constants.INPUT_ENTITY_NAME));
 			}
 		} catch (Exception ex) {
-			response = new JSONObject();
-			response.put(Constants.MIGRATION_STATUS, "failed");
-			response.put(Constants.FAILURE_CAUSE, ex.toString());
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-		return response;
+		return insertResponse;
 	}
 }

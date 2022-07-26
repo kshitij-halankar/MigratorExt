@@ -17,7 +17,8 @@ import utils.Constants;
 public class ResultSetConverter {
 
 	public JSONObject convertResultSetToJSON(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		try {
 			String dbURL = metadata.get(Constants.INPUT_SOURCE).toString();
 			String dbUserName = metadata.get(Constants.INPUT_SOURCE_LOGIN_USERNAME).toString();
@@ -63,14 +64,14 @@ public class ResultSetConverter {
 					fetchedData.add(tempObject);
 				}
 				MongoDBMigrator mongoDBMigrator = new MongoDBMigrator();
-				mongoDBMigrator.insertData(metadata, fetchedData);
+				insertedRecordsCount += mongoDBMigrator.insertData(metadata, fetchedData);
 			}
-
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+			insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
 		} catch (Exception ex) {
-			response = new JSONObject();
-			response.put(Constants.MIGRATION_STATUS, "failed");
-			response.put(Constants.FAILURE_CAUSE, ex.toString());
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-		return response;
+		return insertResponse;
 	}
 }

@@ -14,6 +14,8 @@ import utils.Constants;
 public class XMLConverter {
 
 	public JSONObject convertXMLToJSON(JSONObject metadata, StringBuilder fileData) {
+		JSONObject insertResponse = new JSONObject();
+		int insertedRecordsCount = 0;
 		int batchSize = 0;
 		JSONObject schema = metadata.getJSONObject(Constants.SCHEMA);
 		JSONArray entities = schema.getJSONArray(Constants.ENTITIES);
@@ -39,22 +41,23 @@ public class XMLConverter {
 				batchSize++;
 				if (batchSize == Constants.BATCH_SIZE) {
 					MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-					mongoMigrator.insertData(metadata, menu);
+					insertedRecordsCount += mongoMigrator.insertData(metadata, menu);
 					batchSize = 0;
 					menu = new ArrayList<>();
 				}
 			}
 			if (batchSize > 0) {
 				MongoDBMigrator mongoMigrator = new MongoDBMigrator();
-				mongoMigrator.insertData(metadata, menu);
+				insertedRecordsCount += mongoMigrator.insertData(metadata, menu);
 			}
 		}
-		JSONObject response = new JSONObject();
-		return response;
+		insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_SUCCESS);
+		insertResponse.put(Constants.RESPONSE_TOTAL_RECORDS_INSERTED, insertedRecordsCount);
+		return insertResponse;
 	}
 
 	public JSONObject convertAndInsertXMLToSQL(JSONObject metadata) {
-		JSONObject response = null;
+		JSONObject insertResponse = new JSONObject();
 		String sql = null;
 		try {
 			String inputFile = metadata.get(Constants.INPUT_SOURCE).toString();
@@ -89,14 +92,13 @@ public class XMLConverter {
 				sql += columns + ")" + Constants.SQL_VALUES + "(" + values + ")";
 				System.out.println("sql: " + sql);
 				OracleDBMigrator oracleDBMigrator = new OracleDBMigrator();
-				oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
+				insertResponse = oracleDBMigrator.insertJSONData(metadata, dataRows, mappingAttributes, sql,
 						entity.getString(Constants.INPUT_ENTITY_NAME));
 			}
 		} catch (Exception ex) {
-			response = new JSONObject();
-			response.put(Constants.MIGRATION_STATUS, "failed");
-			response.put(Constants.FAILURE_CAUSE, ex.toString());
+			insertResponse.put(Constants.RESPONSE_STATUS, Constants.RESPONSE_FAILURE);
+			insertResponse.put(Constants.RESPONSE_CAUSE, ex.toString());
 		}
-		return response;
+		return insertResponse;
 	}
 }

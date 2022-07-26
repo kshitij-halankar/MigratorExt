@@ -15,17 +15,17 @@ import utils.Constants;
 public class MigratorExt {
 
 	public static void main(String[] args) {
-//        String input = "src\\test\\csv_mongo.json";
-//        String input = "src\\test\\json_mongo.json";
-//        System.out.println(System.getProperty("user.dir"));
-//        String input = "src\\test\\csv_oracle_sample1.json";
-//        String input = "src\\test\\json_oracle_sample.json";
-//    	String input="src\\test\\xml_oracle_sample.json";
-		String input = "src\\test\\oracle_mongo_sample.json";
-//		String input="src\\test\\mongo_oracle_sample.json";
+//		String input = "src\\test\\csv_mongo.json";
+//		String input = "src\\test\\json_mongo.json";
+//		String input = "src\\test\\csv_oracle_sample1.json";
+//		String input = "src\\test\\json_oracle_sample.json";
+//		String input = "src\\test\\xml_oracle_sample.json";
+//		String input = "src\\test\\oracle_mongo_sample.json";
+		String input = "src\\test\\mongo_oracle_sample.json";
 		try {
 			MigratorExt me = new MigratorExt();
-			System.out.println(me.migrate(input));
+			JSONObject migrateResponse = me.migrate(input);
+			System.out.println(migrateResponse);
 		} catch (Exception ex) {
 			System.out.println(ex.toString());
 		}
@@ -44,7 +44,6 @@ public class MigratorExt {
 			for (int i = 0; i < migratorExt.length(); i++) {
 				JSONObject metadataObj = migratorExt.getJSONObject(i);
 				FileExtractor fileExtractor = new FileExtractor();
-				JSONArray extractedData = null;
 				if (metadataObj.getString(Constants.OUTPUT_SOURCE_TYPE).toString().equals(Constants.ORACLE)) {
 					switch (metadataObj.get(Constants.INPUT_SOURCE_TYPE).toString()) {
 					case Constants.MONGO:

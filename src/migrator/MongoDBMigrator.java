@@ -13,8 +13,7 @@ import java.util.List;
 
 public class MongoDBMigrator {
 
-	public void insertData(JSONObject metadata, List<Document> arr) {
-
+	public int insertData(JSONObject metadata, List<Document> arr) {
 		String dbURL = metadata.get(Constants.OUTPUT_SOURCE).toString();
 		MongoDBConnector mongoDBConnector = new MongoDBConnector();
 		MongoClient client = mongoDBConnector.getMongoClient(dbURL);
@@ -24,6 +23,8 @@ public class MongoDBMigrator {
 				.getJSONArray(Constants.ENTITIES).getJSONObject(0).getString(Constants.OUTPUT_ENTITY_NAME));
 		collection.insertMany(arr);
 		client.close();
+		int insertedRecordsCount = arr.size();
+		return insertedRecordsCount;
 	}
 
 	public void insertData(JSONObject metadata, JSONArray arr) {
