@@ -9,19 +9,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import org.json.JSONObject;
-import converter.CSVConverter;
 import converter.JSONConverter;
 import converter.XMLConverter;
 import utils.Constants;
 
 public class FileExtractor {
-	public JSONObject extractCSVAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
-		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
-		StringBuilder fileData = getFile(filePath);
-		CSVConverter csvConverter = new CSVConverter();
-		return csvConverter.convertCSVToJSON(metadata, fileData);
-	}
-
 	public JSONObject extractXMLAndConvertForMongo(JSONObject metadata) throws IOException, FileNotFoundException {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
@@ -33,7 +25,7 @@ public class FileExtractor {
 		String filePath = metadata.get(Constants.INPUT_SOURCE).toString();
 		StringBuilder fileData = getFile(filePath);
 		JSONConverter jsonConverter = new JSONConverter();
-		return jsonConverter.convertJSONToBSON(metadata, fileData);
+		return jsonConverter.insertJSONToMongo(metadata, new JSONObject(fileData.toString()));
 	}
 
 	public StringBuilder getFile(String filePath) throws IOException {

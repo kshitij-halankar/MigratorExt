@@ -1,0 +1,40 @@
+{
+	"MigratorExt": [
+		{
+			"InputSourceType": "JSON",
+			"InputSource": "src\\test\\sample_json_v1.json",
+			"OutputSourceType": "Oracle",
+			"OutputSource": "jdbc:oracle:thin:@localhost:1521:xe",
+			"OutputSourceLoginUsername": "SYSTEM",
+			"OutputSourceLoginPassword": "12345678",
+			"Schema": {
+				"InputSchema": "data",
+				"OutputSchema": "EmployeeDetails",
+				"Entities": [
+					{
+						"InputEntityName": "",
+						"OutputEntityName": "Emp",
+						"Mappings": [
+							{
+								"InputAttributeName": "EmpId",
+								"OutputAttributeName": "EmpId"
+							},
+							{
+								"InputAttributeName": "EmpName",
+								"OutputAttributeName": "EmployeeName"
+							},
+							{
+								"InputAttributeName": "Salary",
+								"OutputAttributeName": "EmployeeSalary"
+							},
+							{
+								"InputAttributeName": "City",
+								"OutputAttributeName": "EmployeeCity"
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+}

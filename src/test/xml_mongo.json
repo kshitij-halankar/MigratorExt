@@ -2,40 +2,48 @@
 	"MigratorExt": [
 		{
 			"InputSourceType": "XML",
-			"InputSource": "<Directory Path>",
+			"InputSource": "src/test/mongo_test_data.xml",
 			"OutputSourceType": "Mongo",
-			"OutputSource": "<hostname:port:SID>",
-			"OutputSourceLoginUsername": "<Username>",
-			"OutputSourceLoginPassword": "<Password>",
+			"OutputSource": "mongodb://localhost:27017",
+			"OutputSourceLoginUsername": "sysuser",
+			"OutputSourceLoginPassword": "12345678",
 			"Schema": {
-				"InputSchema": "<SchemaName>",
-				"OutputSchema": "<SchemaName>",
+				"InputSchema": "root",
+				"OutputSchema": "TestXMLVolumeDatabase",
 				"Entities": [
 					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName1>",
+						"InputEntityName": "row",
+						"OutputEntityName": "TestXMLVolumeCollection",
 						"Mappings": [
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "Date",
+								"OutputAttributeName": "DT"
 							},
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
-							}
-						]
-					},
-					{
-						"InputEntityName": "<EntityName>",
-						"OutputEntityName": "<CollectionName2>",
-						"Mappings": [
-							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "Open",
+								"OutputAttributeName": "OPN"
 							},
 							{
-								"InputAttributeName": "<InputAttributeName>",
-								"OutputAttributeName": "<OutputAttributeName>"
+								"InputAttributeName": "Index",
+								"OutputAttributeName": "ID"
+							},
+							{
+								"InputAttributeName": "High",
+								"OutputAttributeName": "High"
+							},{
+								"InputAttributeName": "Low",
+								"OutputAttributeName": "Low"
+							},
+							{
+								"InputAttributeName": "Close",
+								"OutputAttributeName": "Close"
+							},{
+								"InputAttributeName": "AdjClose",
+								"OutputAttributeName": "AdjClose"
+							},
+							{
+								"InputAttributeName": "Volume",
+								"OutputAttributeName": "Volume"
 							}
 						]
 					}
